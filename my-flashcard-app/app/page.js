@@ -115,7 +115,7 @@ export default function FlashcardApp() {
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">SAP CSV Mastery Portal</h1>
-          <p className="mt-2 text-slate-500">Interactive Knowledge Base for Life Sciences Compliance</p>
+          <p className="mt-2 text-slate-500">Interactive Knowledge Base for Life Sciences Compliance prepared by Mark & Xincheng</p>
           <div className="mt-8 flex flex-wrap justify-center gap-2">
             {['All', 'Global', 'Cloud', 'China'].map((cat) => (
               <button
