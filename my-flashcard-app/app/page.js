@@ -114,8 +114,8 @@ export default function FlashcardApp() {
     <div className="min-h-screen bg-slate-50 py-12 px-4 font-sans">
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">SAP CSV Mastery Portal</h1>
-          <p className="mt-2 text-slate-500">Interactive Knowledge Base for Life Sciences Compliance prepared by Mark & Xincheng</p>
+          <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">SAP CSV & GxP in LSHC</h1>
+          <p className="mt-2 text-slate-500">Engagement Wiki for Regulatory Compliance prepared by Mark & Xincheng, April 2026</p>
           <div className="mt-8 flex flex-wrap justify-center gap-2">
             {['All', 'Global', 'Cloud', 'China'].map((cat) => (
               <button
