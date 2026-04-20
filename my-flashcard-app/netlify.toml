@@ -1,0 +1,4 @@
+[build]
+  base = "my-flashcard-app"
+  command = "npm run build"
+  publish = ".next"
