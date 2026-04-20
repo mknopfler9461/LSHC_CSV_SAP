@@ -84,7 +84,7 @@ const flashcardData = [
       { "id": 67, "question": "How does 'Sandbox' environment use differ in PCE CSV?", "answer": "It is used for the 'Risk Assessment' phase to see how standard SAP features handle GxP requirements before formal build." },
       { "id": 68, "question": "What is a 'Validation Assessment' for PCE notes?", "answer": "Evaluating every SAP Note or Hotfix to see if it touches a GxP-critical part of the system." },
       { "id": 69, "question": "What is the 'One-System' fallacy in cloud?", "answer": "The mistake of thinking cloud validation is just 'signing off' what the vendor gives you; business processes remain the customer's responsibility." },
-      { "id": 60, "question": "What is 'Electronic Document Management' (EDMS) for PCE?", "answer": "A validated tool to house all cloud validation evidence (VP, URS, TM, VSR)." },
+      { "id": 70, "question": "What is 'Electronic Document Management' (EDMS) for PCE?", "answer": "A validated tool to house all cloud validation evidence (VP, URS, TM, VSR)." },
       { "id": 71, "question": "How are cloud 'Integrations' (e.g., via APIs) validated?", "answer": "By testing the data integrity and security of the connection point between PCE and other systems." },
       { "id": 72, "question": "What is 'SaaS validation' vs 'PCE validation'?", "answer": "PCE offers more control than SaaS, allowing for more detailed custom validation." },
       { "id": 73, "question": "What is 'Release Management' in a validated PCE setup?", "answer": "The controlled process of moving validated configurations from Dev to Test to Production." },
