@@ -145,7 +145,7 @@ export default function FlashcardApp() {
       <div className="max-w-6xl mx-auto">
         <header className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">SAP CSV & GxP in LSHC</h1>
-          <p className="mt-2 text-slate-500">Engagement Wiki for Regulatory Compliance prepared by Mark & Xincheng, April 2026</p>
+          <p className="mt-2 text-slate-500">Project Wiki for Regulatory Compliance prepared by Mark & Xincheng, April 2026</p>
           <div className="mt-8 flex flex-wrap justify-center gap-2">
             {['All', 'Global', 'China', 'Cloud', 'Architecture'].map((cat) => (
               <button
@@ -155,7 +155,7 @@ export default function FlashcardApp() {
                   filter === cat ? 'bg-blue-600 text-white shadow-blue-200' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
-                {cat === 'All' ? 'View All 100' : cat}
+                {cat === 'All' ? 'View All' : cat}
               </button>
             ))}
           </div>
