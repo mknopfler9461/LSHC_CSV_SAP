@@ -60,16 +60,16 @@ export default function FlashcardApp() {
           
           {/* Category Tabs */}
           <div className="mt-8 flex justify-center space-x-4">
-            {['All', 'Global', 'Cloud', 'China'].map((cat) => {
-              const count = cat === 'All' ? cards.length : cards.filter(c => c.category.includes(cat)).length;
-              return (
-                <button
-                  key={cat}
-                  onClick={() => setFilter(cat)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  filter === cat ? 'bg-blue-600 text-white' : 'bg-white text-slate-600 hover:bg-slate-200'
-            }`}
-          >
+            {['All', 'Global', 'China', 'Cloud', 'Architecture'].map((cat) => {
+  const count = cat === 'All' ? cards.length : cards.filter(c => c.category.includes(cat)).length;
+  return (
+    <button
+      key={cat}
+      onClick={() => setFilter(cat)}
+      className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+        filter === cat ? 'bg-blue-600 text-white' : 'bg-white text-slate-600 hover:bg-slate-200'
+      }`}
+    >
       {cat} <span className={`ml-1 text-xs font-bold px-1.5 py-0.5 rounded-full ${filter === cat ? 'bg-blue-500 text-white' : 'bg-slate-200 text-slate-600'}`}>{count}</span>
     </button>
   );
