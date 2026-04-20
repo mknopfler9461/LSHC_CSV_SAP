@@ -147,7 +147,8 @@ export default function FlashcardApp() {
           <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">SAP CSV & GxP in LSHC</h1>
           <p className="mt-2 text-slate-500">Project Wiki for Regulatory Compliance prepared by Mark & Xincheng, April 2026</p>
           <div className="mt-8 flex flex-wrap justify-center gap-2">
-            {['All', 'Global', 'China', 'Cloud', 'Architecture'].map((cat) => (
+            {['All', 'Global', 'China', 'Cloud', 'Architecture'].map((cat) => {
+  return (
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
@@ -156,8 +157,10 @@ export default function FlashcardApp() {
                 }`}
               >
                 {cat === 'All' ? 'View All' : cat}
-              </button>
-            ))}
+      <span className={`ml-2 text-xs font-bold px-1.5 py-0.5 rounded-full ${filter === cat ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-500'}`}>{allCards.filter(c => cat === 'All' || c.category.includes(cat)).length}</span>
+    </button>
+  );
+})}
           </div>
         </header>
 
