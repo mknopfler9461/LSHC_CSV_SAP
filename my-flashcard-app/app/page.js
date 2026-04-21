@@ -44,7 +44,7 @@ const flashcardData = [
       { "id": 32, "question": "What is the CAC?", "answer": "Cyberspace Administration of China; the primary regulator for data security and PIPL compliance." },
       { "id": 33, "question": "How does the 'Data Security Law' (DSL) impact SAP projects?", "answer": "It categorizes data and mandates protections based on the impact on national security." },
       { "id": 34, "question": "What is 'MLPS Filing'?", "answer": "The formal process of submitting SAP system security designs to the local Public Security Bureau for approval." },
-      { "id": 35, "question": "What is an 'Appointed Third-Party' audit in China CSV?", "answer": "Engaging a China-certified agency to audit the SAP system’s cybersecurity (MLPS) compliance." },
+      { "id": 35, "question": "What is an 'Appointed Third-Party' audit in China CSV?", "answer": "Engaging a China-certified agency to audit the SAP system's cybersecurity (MLPS) compliance." },
       { "id": 36, "question": "Does SAP China require a 'GB' (Guobiao) standard check?", "answer": "Yes, technical validation often includes checking against specific 'GB' national standards for encryption and security." },
       { "id": 37, "question": "How are 'Fapiao' audits conducted in a validated SAP environment?", "answer": "Validation must prove that the SAP-to-Golden-Tax interface is accurate and tamper-proof." },
       { "id": 38, "question": "What is 'Sensitive Personal Information' under PIPL?", "answer": "Biometric data, medical history, or financial info in SAP that requires even higher levels of protection and consent." },
@@ -72,7 +72,7 @@ const flashcardData = [
       { "id": 55, "question": "What is a 'Validation Platform' in the PCE model?", "answer": "Using tools like SAP Cloud ALM to manage validation documents and testing in a digital, integrated environment." },
       { "id": 56, "question": "What is the customer's role in PCE Infrastructure Qualification?", "answer": "Reviewing and approving the SOC 1/SOC 2 reports and SAP's own internal validation evidence." },
       { "id": 57, "question": "Does PCE allow for ABAP customization in CSV projects?", "answer": "Yes, but custom code (GAMP Cat 5) requires significantly more validation effort than standard configuration." },
-      { "id": 58, "question": "How are SAP PCE 'Managed Services' validated?", "answer": "Through a Service Level Agreement (SLA) and a clear definition of the vendor’s GxP-relevant operational procedures." },
+      { "id": 58, "question": "How are SAP PCE 'Managed Services' validated?", "answer": "Through a Service Level Agreement (SLA) and a clear definition of the vendor's GxP-relevant operational procedures." },
       { "id": 59, "question": "What is 'Cloud Compliance' documentation for PCE?", "answer": "Standard packages provided by SAP to help customers accelerate their validation effort for the PCE environment." },
       { "id": 60, "question": "What is the risk of 'Force-Upgrades' in PCE?", "answer": "Upgrades are mandatory within a certain window; validation must be planned and executed within that fixed timeframe." },
       { "id": 61, "question": "How does BTP (Business Technology Platform) impact PCE validation?", "answer": "Extensions on BTP are 'outside' the core SAP; their integration and data flow must be separately validated." },
@@ -93,7 +93,7 @@ const flashcardData = [
     ]
   },
   {
-  "category": "Architecture & Tools",
+    "category": "Architecture & Tools",
     "cards": [
       { "id": 76, "question": "Which SAP modules typically fall under GMP (Manufacturing)?", "answer": "PP/PP-PI, QM, MM, EWM/WM, Batch Management, and ATTP (Serialization)." },
       { "id": 77, "question": "Which SAP modules are primarily governed by GDP (Distribution)?", "answer": "SD (Sales and Distribution), LE-TRA (Transportation), and Serialization components." },
@@ -124,11 +124,12 @@ const flashcardData = [
   }
 ];
 
-const allCards = flashcardData.flatMap(cat => 
+const allCards = flashcardData.flatMap(cat =>
   cat.cards.map(card => ({ ...card, category: cat.category }))
 );
 
 export default function FlashcardApp() {
+  const [showCover, setShowCover] = useState(true);
   const [filter, setFilter] = useState('All');
   const [flippedCards, setFlippedCards] = useState({});
 
@@ -136,62 +137,153 @@ export default function FlashcardApp() {
     setFlippedCards(prev => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const filteredCards = filter === 'All' 
-    ? allCards 
+  const filteredCards = filter === 'All'
+    ? allCards
     : allCards.filter(c => c.category.includes(filter));
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4 font-sans">
-      <div className="max-w-6xl mx-auto">
-        <header className="text-center mb-12">
-          <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">SAP CSV & GxP in LSHC</h1>
-          <p className="mt-2 text-slate-500">Project Wiki for Regulatory Compliance prepared by Mark & Xincheng, April 2026</p>
-          <div className="mt-8 flex flex-wrap justify-center gap-2">
-            {['All', 'Global', 'China', 'Cloud', 'Architecture'].map((cat) => {
-  return (
-              <button
-                key={cat}
-                onClick={() => setFilter(cat)}
-                className={`px-6 py-2 rounded-full text-sm font-semibold transition-all shadow-sm ${
-                  filter === cat ? 'bg-blue-600 text-white shadow-blue-200' : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
-                }`}
-              >
-                {cat === 'All' ? 'View All' : cat}
-      <span className={`ml-2 text-xs font-bold px-1.5 py-0.5 rounded-full ${filter === cat ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-500'}`}>{allCards.filter(c => cat === 'All' || c.category.includes(cat)).length}</span>
-    </button>
-  );
-})}
-          </div>
-        </header>
+    <>
+      {/* ── Cover Slide ── */}
+      {showCover && (
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-900 overflow-hidden">
+          {/* radial blue glow */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(37,99,235,0.18) 0%, transparent 70%)',
+            }}
+          />
+          {/* subtle grid overlay */}
+          <div
+            className="absolute inset-0 pointer-events-none opacity-[0.04]"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
+              backgroundSize: '40px 40px',
+            }}
+          />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCards.map((card) => (
-            <div 
-              key={card.id}
-              onClick={() => toggleFlip(card.id)}
-              className="h-56 cursor-pointer group relative"
+          <div className="relative text-center text-white max-w-2xl px-8">
+            <span className="text-xs uppercase tracking-[0.35em] text-blue-400 font-bold block mb-8">
+              Life Sciences &amp; Healthcare · SAP Consulting
+            </span>
+
+            <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight leading-tight mb-6">
+              SAP CSV &amp; GxP
+              <br />
+              <span className="text-blue-400">Compliance</span>
+            </h1>
+
+            <p className="text-slate-300 text-lg mb-3">
+              100 knowledge cards across 4 compliance domains
+            </p>
+            <p className="text-slate-500 text-sm mb-10">
+              Global CSV &nbsp;·&nbsp; China Compliance &nbsp;·&nbsp; S/4HANA Cloud (PCE) &nbsp;·&nbsp; Architecture &amp; Tools
+            </p>
+
+            <button
+              onClick={() => setShowCover(false)}
+              className="px-10 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full text-sm uppercase tracking-widest transition-all duration-300"
+              style={{ boxShadow: '0 0 30px rgba(37,99,235,0.4)' }}
             >
-              <div className={`w-full h-full rounded-2xl p-8 flex items-center justify-center text-center transition-all duration-300 transform hover:-translate-y-1 ${
-                flippedCards[card.id] 
-                  ? 'bg-blue-600 text-white shadow-xl shadow-blue-100' 
-                  : 'bg-white border-2 border-slate-100 text-slate-800 shadow-sm hover:border-blue-200'
-              }`}>
-                <div>
-                  <span className={`text-[10px] uppercase font-black tracking-widest block mb-4 ${flippedCards[card.id] ? 'text-blue-200' : 'text-blue-500'}`}>
-                    {card.category}
+              Begin &rarr;
+            </button>
+
+            <p className="mt-10 text-slate-600 text-xs tracking-wide">
+              Prepared by Mark &amp; Xincheng &nbsp;·&nbsp; April 2026
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── Main App ── */}
+      <div className="min-h-screen bg-slate-50 py-12 px-4 font-sans">
+        <div className="max-w-6xl mx-auto">
+          <header className="text-center mb-12">
+            <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">
+              SAP CSV &amp; GxP in LSHC
+            </h1>
+            <p className="mt-2 text-slate-500">
+              Project Wiki for Regulatory Compliance prepared by Mark &amp; Xincheng, April 2026
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-2">
+              {['All', 'Global', 'China', 'Cloud', 'Architecture'].map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setFilter(cat)}
+                  className={`px-6 py-2 rounded-full text-sm font-semibold transition-all shadow-sm ${
+                    filter === cat
+                      ? 'bg-blue-600 text-white shadow-blue-200'
+                      : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                  }`}
+                >
+                  {cat === 'All' ? 'View All' : cat}
+                  <span
+                    className={`ml-2 text-xs font-bold px-1.5 py-0.5 rounded-full ${
+                      filter === cat ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-500'
+                    }`}
+                  >
+                    {allCards.filter(c => cat === 'All' || c.category.includes(cat)).length}
                   </span>
-                  <p className="text-base leading-snug font-semibold">
-                    {flippedCards[card.id] ? card.answer : card.question}
-                  </p>
-                  <p className={`mt-4 text-[10px] font-bold uppercase opacity-40`}>
-                    {flippedCards[card.id] ? "Click to Flip Back" : "Click to Reveal" }
-                  </p>
+                </button>
+              ))}
+            </div>
+          </header>
+
+          {/* ── Card Grid ── */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredCards.map((card) => (
+              <div
+                key={card.id}
+                onClick={() => toggleFlip(card.id)}
+                className="h-56 cursor-pointer perspective"
+              >
+                {/* flip container */}
+                <div
+                  className="relative w-full h-full transition-transform duration-500"
+                  style={{
+                    transformStyle: 'preserve-3d',
+                    transform: flippedCards[card.id] ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                  }}
+                >
+                  {/* Front face — question */}
+                  <div className="absolute inset-0 backface-hidden rounded-2xl p-6 flex items-center justify-center text-center bg-white border-2 border-slate-100 text-slate-800 shadow-sm hover:border-blue-200 hover:-translate-y-1 transition-transform duration-200">
+                    <div>
+                      <span className="text-[10px] uppercase font-black tracking-widest block mb-3 text-blue-500">
+                        {card.category}
+                      </span>
+                      <p className="text-base leading-snug font-semibold">{card.question}</p>
+                      <p className="mt-4 text-[10px] font-bold uppercase opacity-40">
+                        Click to Reveal
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Back face — answer */}
+                  <div
+                    className="absolute inset-0 backface-hidden rounded-2xl p-6 flex items-center justify-center text-center bg-blue-600 text-white shadow-xl"
+                    style={{
+                      transform: 'rotateY(180deg)',
+                      boxShadow: '0 8px 30px rgba(37,99,235,0.25)',
+                    }}
+                  >
+                    <div>
+                      <span className="text-[10px] uppercase font-black tracking-widest block mb-3 text-blue-200">
+                        {card.category}
+                      </span>
+                      <p className="text-base leading-snug font-semibold">{card.answer}</p>
+                      <p className="mt-4 text-[10px] font-bold uppercase opacity-40">
+                        Click to Flip Back
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
