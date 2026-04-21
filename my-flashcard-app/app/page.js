@@ -128,6 +128,74 @@ const allCards = flashcardData.flatMap(cat =>
   cat.cards.map(card => ({ ...card, category: cat.category }))
 );
 
+const CATS = [
+  {
+    key: 'All',
+    label: 'View All',
+    activeBg: 'bg-slate-700 text-white',
+    activeShadow: 'shadow-slate-300',
+    activeBadge: 'bg-slate-600 text-white',
+    icon: (
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="2" width="5" height="5" rx="1"/><rect x="9" y="2" width="5" height="5" rx="1"/>
+        <rect x="2" y="9" width="5" height="5" rx="1"/><rect x="9" y="9" width="5" height="5" rx="1"/>
+      </svg>
+    ),
+  },
+  {
+    key: 'Global',
+    label: 'Global CSV',
+    activeBg: 'bg-blue-600 text-white',
+    activeShadow: 'shadow-blue-200',
+    activeBadge: 'bg-blue-500 text-white',
+    icon: (
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+        <circle cx="8" cy="8" r="6"/>
+        <path d="M8 2C6 4 5 6 5 8s1 4 3 6M8 2c2 2 3 4 3 6s-1 4-3 6"/>
+        <path d="M2.5 6h11M2.5 10h11"/>
+      </svg>
+    ),
+  },
+  {
+    key: 'China',
+    label: 'China',
+    activeBg: 'bg-rose-600 text-white',
+    activeShadow: 'shadow-rose-200',
+    activeBadge: 'bg-rose-500 text-white',
+    icon: (
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 14V7l6-5 6 5v7H2z"/>
+        <path d="M6 14v-4h4v4"/>
+      </svg>
+    ),
+  },
+  {
+    key: 'Cloud',
+    label: 'Cloud (PCE)',
+    activeBg: 'bg-sky-500 text-white',
+    activeShadow: 'shadow-sky-200',
+    activeBadge: 'bg-sky-400 text-white',
+    icon: (
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+        <path d="M12.5 10.5a2.5 2.5 0 000-5 .5.5 0 01-.5-.4 4 4 0 00-7.9.9A2.5 2.5 0 003.5 11h9z"/>
+      </svg>
+    ),
+  },
+  {
+    key: 'Architecture',
+    label: 'Architecture',
+    activeBg: 'bg-violet-600 text-white',
+    activeShadow: 'shadow-violet-200',
+    activeBadge: 'bg-violet-500 text-white',
+    icon: (
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+        <circle cx="8" cy="8" r="2.5"/>
+        <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4"/>
+      </svg>
+    ),
+  },
+];
+
 export default function FlashcardApp() {
   const [showCover, setShowCover] = useState(true);
   const [filter, setFilter] = useState('All');
@@ -208,26 +276,29 @@ export default function FlashcardApp() {
               Project Wiki for Regulatory Compliance prepared by Mark &amp; Xincheng, April 2026
             </p>
             <div className="mt-8 flex flex-wrap justify-center gap-2">
-              {['All', 'Global', 'China', 'Cloud', 'Architecture'].map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setFilter(cat)}
-                  className={`px-6 py-2 rounded-full text-sm font-semibold transition-all shadow-sm ${
-                    filter === cat
-                      ? 'bg-blue-600 text-white shadow-blue-200'
-                      : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
-                  }`}
-                >
-                  {cat === 'All' ? 'View All' : cat}
-                  <span
-                    className={`ml-2 text-xs font-bold px-1.5 py-0.5 rounded-full ${
-                      filter === cat ? 'bg-blue-500 text-white' : 'bg-slate-100 text-slate-500'
+              {CATS.map(({ key, label, activeBg, activeShadow, activeBadge, icon }) => {
+                const isActive = filter === key;
+                const count = allCards.filter(c => key === 'All' || c.category.includes(key)).length;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => setFilter(key)}
+                    className={`flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-sm ${
+                      isActive
+                        ? `${activeBg} shadow-md ${activeShadow}`
+                        : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
                     }`}
                   >
-                    {allCards.filter(c => cat === 'All' || c.category.includes(cat)).length}
-                  </span>
-                </button>
-              ))}
+                    <span className="flex-shrink-0">{icon}</span>
+                    {label}
+                    <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full ${
+                      isActive ? activeBadge : 'bg-slate-100 text-slate-500'
+                    }`}>
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </header>
 
