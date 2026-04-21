@@ -233,11 +233,12 @@ export default function FlashcardApp() {
 
           {/* ── Card Grid ── */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCards.map((card) => (
+            {filteredCards.map((card, index) => (
               <div
                 key={card.id}
                 onClick={() => toggleFlip(card.id)}
-                className="h-56 cursor-pointer perspective"
+                className="h-56 cursor-pointer perspective card-enter"
+                style={{ animationDelay: `${Math.min(index * 0.05, 0.6)}s` }}
               >
                 {/* flip container */}
                 <div
