@@ -148,6 +148,7 @@ const CATS = [
     activeBg: 'bg-blue-600 text-white',
     activeShadow: 'shadow-blue-200',
     activeBadge: 'bg-blue-500 text-white',
+    barBg: 'bg-blue-600',
     icon: (
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <circle cx="8" cy="8" r="6"/>
@@ -162,6 +163,7 @@ const CATS = [
     activeBg: 'bg-rose-600 text-white',
     activeShadow: 'shadow-rose-200',
     activeBadge: 'bg-rose-500 text-white',
+    barBg: 'bg-rose-600',
     icon: (
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M2 14V7l6-5 6 5v7H2z"/>
@@ -175,6 +177,7 @@ const CATS = [
     activeBg: 'bg-sky-500 text-white',
     activeShadow: 'shadow-sky-200',
     activeBadge: 'bg-sky-400 text-white',
+    barBg: 'bg-sky-500',
     icon: (
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <path d="M12.5 10.5a2.5 2.5 0 000-5 .5.5 0 01-.5-.4 4 4 0 00-7.9.9A2.5 2.5 0 003.5 11h9z"/>
@@ -187,6 +190,7 @@ const CATS = [
     activeBg: 'bg-violet-600 text-white',
     activeShadow: 'shadow-violet-200',
     activeBadge: 'bg-violet-500 text-white',
+    barBg: 'bg-violet-600',
     icon: (
       <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
         <circle cx="8" cy="8" r="2.5"/>
@@ -200,9 +204,16 @@ export default function FlashcardApp() {
   const [showCover, setShowCover] = useState(true);
   const [filter, setFilter] = useState('All');
   const [flippedCards, setFlippedCards] = useState({});
+  const [revealedCards, setRevealedCards] = useState(new Set());
 
   const toggleFlip = (id) => {
     setFlippedCards(prev => ({ ...prev, [id]: !prev[id] }));
+    setRevealedCards(prev => {
+      if (prev.has(id)) return prev;
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
   };
 
   const filteredCards = filter === 'All'
@@ -301,6 +312,32 @@ export default function FlashcardApp() {
               })}
             </div>
           </header>
+
+          {/* ── Progress Dashboard ── */}
+          <div className="mb-8 grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {CATS.filter(c => c.key !== 'All').map(({ key, label, icon, barBg }) => {
+              const total = allCards.filter(c => c.category.includes(key)).length;
+              const revealed = allCards.filter(c => c.category.includes(key) && revealedCards.has(c.id)).length;
+              return (
+                <div key={key} className="bg-white rounded-xl p-4 shadow-sm border border-slate-100">
+                  <div className="flex items-center gap-1.5 text-slate-400 mb-2">
+                    <span className="flex-shrink-0">{icon}</span>
+                    <span className="text-xs font-semibold uppercase tracking-wide truncate">{label}</span>
+                  </div>
+                  <div className="flex items-baseline gap-1 mb-2.5">
+                    <span className="text-2xl font-extrabold text-slate-800">{revealed}</span>
+                    <span className="text-sm text-slate-400">/ {total} revealed</span>
+                  </div>
+                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${barBg}`}
+                      style={{ width: `${Math.round((revealed / total) * 100)}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
 
           {/* ── Card Grid ── */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
