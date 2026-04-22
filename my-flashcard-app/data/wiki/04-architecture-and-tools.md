@@ -1,3 +1,8 @@
+---
+key: architecture
+label: Architecture
+---
+
 # Architecture & Toolset
 
 ## Which SAP modules typically fall under GMP (Manufacturing)?

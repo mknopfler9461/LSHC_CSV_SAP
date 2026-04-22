@@ -1,3 +1,8 @@
+---
+key: china
+label: China
+---
+
 # China Compliance in GxP & CSV
 
 ## What is MLPS 2.0 and its relevance to SAP in China?

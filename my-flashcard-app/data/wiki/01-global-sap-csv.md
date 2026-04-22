@@ -1,3 +1,8 @@
+---
+key: global
+label: Global CSV
+---
+
 # Global SAP GxP & CSV
 
 ## What is the primary goal of Computer System Validation (CSV) in SAP projects?

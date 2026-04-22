@@ -1,6 +1,8 @@
 [
   {
-    "category": "Global SAP CSV",
+    "key": "global",
+    "label": "Global CSV",
+    "category": "Global SAP GxP & CSV",
     "cards": [
       {
         "id": 1,
@@ -130,7 +132,9 @@
     ]
   },
   {
-    "category": "China Compliance",
+    "key": "china",
+    "label": "China",
+    "category": "China Compliance in GxP & CSV",
     "cards": [
       {
         "id": 26,
@@ -260,7 +264,9 @@
     ]
   },
   {
-    "category": "S/4HANA Cloud (PCE)",
+    "key": "cloud",
+    "label": "Cloud (PCE)",
+    "category": "SAP S/4HANA Cloud (PCE)",
     "cards": [
       {
         "id": 51,
@@ -390,7 +396,9 @@
     ]
   },
   {
-    "category": "Architecture & Tools",
+    "key": "architecture",
+    "label": "Architecture",
+    "category": "Architecture & Toolset",
     "cards": [
       {
         "id": 76,

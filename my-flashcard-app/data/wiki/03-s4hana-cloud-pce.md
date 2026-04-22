@@ -1,3 +1,8 @@
+---
+key: cloud
+label: Cloud (PCE)
+---
+
 # SAP S/4HANA Cloud (PCE)
 
 ## How does CSV change for S/4HANA PCE compared to On-Premise?

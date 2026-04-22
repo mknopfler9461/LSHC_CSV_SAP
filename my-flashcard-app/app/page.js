@@ -3,12 +3,20 @@ import React, { useState } from 'react';
 import flashcardData from '../data/flashcards.json';
 
 const allCards = flashcardData.flatMap(cat =>
-  cat.cards.map(card => ({ ...card, category: cat.category }))
+  cat.cards.map(card => ({
+    ...card,
+    category: cat.category,
+    categoryKey: cat.key,
+  }))
+);
+
+const categoryLabels = Object.fromEntries(
+  flashcardData.map(({ key, label }) => [key, label])
 );
 
 const CATS = [
   {
-    key: 'All',
+    key: 'all',
     label: 'View All',
     activeBg: 'bg-slate-700 text-white',
     activeShadow: 'shadow-slate-300',
@@ -21,8 +29,8 @@ const CATS = [
     ),
   },
   {
-    key: 'Global',
-    label: 'Global CSV',
+    key: 'global',
+    label: categoryLabels.global,
     activeBg: 'bg-blue-600 text-white',
     activeShadow: 'shadow-blue-200',
     activeBadge: 'bg-blue-500 text-white',
@@ -36,8 +44,8 @@ const CATS = [
     ),
   },
   {
-    key: 'China',
-    label: 'China',
+    key: 'china',
+    label: categoryLabels.china,
     activeBg: 'bg-rose-600 text-white',
     activeShadow: 'shadow-rose-200',
     activeBadge: 'bg-rose-500 text-white',
@@ -50,8 +58,8 @@ const CATS = [
     ),
   },
   {
-    key: 'Cloud',
-    label: 'Cloud (PCE)',
+    key: 'cloud',
+    label: categoryLabels.cloud,
     activeBg: 'bg-sky-500 text-white',
     activeShadow: 'shadow-sky-200',
     activeBadge: 'bg-sky-400 text-white',
@@ -63,8 +71,8 @@ const CATS = [
     ),
   },
   {
-    key: 'Architecture',
-    label: 'Architecture',
+    key: 'architecture',
+    label: categoryLabels.architecture,
     activeBg: 'bg-violet-600 text-white',
     activeShadow: 'shadow-violet-200',
     activeBadge: 'bg-violet-500 text-white',
@@ -80,7 +88,7 @@ const CATS = [
 
 export default function FlashcardApp() {
   const [showCover, setShowCover] = useState(true);
-  const [filter, setFilter] = useState('All');
+  const [filter, setFilter] = useState('all');
   const [flippedCards, setFlippedCards] = useState({});
   const [revealedCards, setRevealedCards] = useState(new Set());
 
@@ -94,9 +102,9 @@ export default function FlashcardApp() {
     });
   };
 
-  const filteredCards = filter === 'All'
+  const filteredCards = filter === 'all'
     ? allCards
-    : allCards.filter(c => c.category.includes(filter));
+    : allCards.filter(c => c.categoryKey === filter);
 
   return (
     <>
@@ -167,7 +175,7 @@ export default function FlashcardApp() {
             <div className="mt-8 flex flex-wrap justify-center gap-2">
               {CATS.map(({ key, label, activeBg, activeShadow, activeBadge, icon }) => {
                 const isActive = filter === key;
-                const count = allCards.filter(c => key === 'All' || c.category.includes(key)).length;
+                const count = allCards.filter(c => key === 'all' || c.categoryKey === key).length;
                 return (
                   <button
                     key={key}
@@ -194,8 +202,8 @@ export default function FlashcardApp() {
           {/* ── Progress Dashboard ── */}
           <div className="mb-8 grid grid-cols-2 lg:grid-cols-4 gap-3">
             {CATS.filter(c => c.key !== 'All').map(({ key, label, icon, barBg }) => {
-              const total = allCards.filter(c => c.category.includes(key)).length;
-              const revealed = allCards.filter(c => c.category.includes(key) && revealedCards.has(c.id)).length;
+              const total = allCards.filter(c => c.categoryKey === key).length;
+              const revealed = allCards.filter(c => c.categoryKey === key && revealedCards.has(c.id)).length;
               return (
                 <div key={key} className="bg-white rounded-xl p-4 shadow-sm border border-slate-100">
                   <div className="flex items-center gap-1.5 text-slate-400 mb-2">
