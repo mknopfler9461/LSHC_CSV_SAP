@@ -129,7 +129,7 @@ export default function FlashcardApp() {
       <button
         key={key}
         onClick={() => setFilter(key)}
-        className={`min-w-0 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all ${
+        className={`flex items-center gap-1.5 rounded-full border px-5 py-2 text-sm font-semibold shadow-sm transition-all ${
           isActive
             ? 'border-slate-800 bg-slate-800 text-white shadow-sm'
             : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
@@ -243,7 +243,7 @@ export default function FlashcardApp() {
               <div className="flex max-w-full flex-nowrap justify-center gap-2 overflow-x-auto pb-1">
                 {CATS.map(renderThinFilterButton)}
               </div>
-              <div className="w-full max-w-md">
+              <div className="grid w-full grid-cols-1 gap-3 sm:max-w-sm">
                 {CATS.filter(({ key }) => key === 'all').map(renderProgressFilterButton)}
               </div>
               <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
