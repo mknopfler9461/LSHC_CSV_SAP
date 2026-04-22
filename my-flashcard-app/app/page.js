@@ -172,8 +172,8 @@ export default function FlashcardApp() {
             <p className="mt-2 text-slate-500">
               Project Wiki for Regulatory Compliance prepared by Mark &amp; Xincheng, April 2026
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-2">
-              {CATS.map(({ key, label, activeBg, activeShadow, activeBadge, icon }) => {
+            <div className="mt-8 flex flex-col items-center gap-3">
+              {CATS.filter(({ key }) => key === 'all').map(({ key, label, activeBg, activeShadow, activeBadge, icon }) => {
                 const isActive = filter === key;
                 const count = allCards.filter(c => key === 'all' || c.categoryKey === key).length;
                 return (
@@ -196,6 +196,31 @@ export default function FlashcardApp() {
                   </button>
                 );
               })}
+              <div className="flex flex-wrap justify-center gap-2">
+                {CATS.filter(({ key }) => key !== 'all').map(({ key, label, activeBg, activeShadow, activeBadge, icon }) => {
+                  const isActive = filter === key;
+                  const count = allCards.filter(c => c.categoryKey === key).length;
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => setFilter(key)}
+                      className={`flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-sm ${
+                        isActive
+                          ? `${activeBg} shadow-md ${activeShadow}`
+                          : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
+                      }`}
+                    >
+                      <span className="flex-shrink-0">{icon}</span>
+                      {label}
+                      <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full ${
+                        isActive ? activeBadge : 'bg-slate-100 text-slate-500'
+                      }`}>
+                        {count}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </header>
 
