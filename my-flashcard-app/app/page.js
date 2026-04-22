@@ -106,6 +106,73 @@ export default function FlashcardApp() {
     ? allCards
     : allCards.filter(c => c.categoryKey === filter);
 
+  const getCategoryTotal = (key) => (
+    key === 'all'
+      ? allCards.length
+      : allCards.filter(card => card.categoryKey === key).length
+  );
+
+  const getCategoryRevealed = (key) => (
+    key === 'all'
+      ? allCards.filter(card => revealedCards.has(card.id)).length
+      : allCards.filter(card => card.categoryKey === key && revealedCards.has(card.id)).length
+  );
+
+  const getProgressWidth = (revealed, total) => (
+    total === 0 ? 0 : Math.round((revealed / total) * 100)
+  );
+
+  const renderThinFilterButton = ({ key, label }) => {
+    const isActive = filter === key;
+
+    return (
+      <button
+        key={key}
+        onClick={() => setFilter(key)}
+        className={`min-w-0 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all ${
+          isActive
+            ? 'border-slate-800 bg-slate-800 text-white shadow-sm'
+            : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
+        }`}
+      >
+        {label}
+      </button>
+    );
+  };
+
+  const renderProgressFilterButton = ({ key, label, activeBg, activeShadow, icon, barBg }) => {
+    const isActive = filter === key;
+    const total = getCategoryTotal(key);
+    const revealed = getCategoryRevealed(key);
+
+    return (
+      <button
+        key={key}
+        onClick={() => setFilter(key)}
+        className={`w-full rounded-lg border p-4 text-left transition-all ${
+          isActive
+            ? `${activeBg} border-transparent shadow-md ${activeShadow}`
+            : 'border-slate-100 bg-white text-slate-800 shadow-sm hover:border-blue-200 hover:bg-slate-50'
+        }`}
+      >
+        <div className={`mb-2 flex items-center gap-1.5 ${isActive ? 'text-white/80' : 'text-slate-400'}`}>
+          <span className="flex-shrink-0">{icon}</span>
+          <span className="truncate text-xs font-semibold uppercase tracking-wide">{label}</span>
+        </div>
+        <div className="mb-2.5 flex items-baseline gap-1">
+          <span className={`text-2xl font-extrabold ${isActive ? 'text-white' : 'text-slate-800'}`}>{revealed}</span>
+          <span className={`text-sm ${isActive ? 'text-white/70' : 'text-slate-400'}`}>/ {total} revealed</span>
+        </div>
+        <div className={`h-1.5 overflow-hidden rounded-full ${isActive ? 'bg-white/25' : 'bg-slate-100'}`}>
+          <div
+            className={`h-full rounded-full transition-all duration-500 ${isActive ? 'bg-white' : barBg || 'bg-slate-700'}`}
+            style={{ width: `${getProgressWidth(revealed, total)}%` }}
+          />
+        </div>
+      </button>
+    );
+  };
+
   return (
     <>
       {/* ── Cover Slide ── */}
@@ -173,82 +240,17 @@ export default function FlashcardApp() {
               Project Wiki for Regulatory Compliance prepared by Mark &amp; Xincheng, April 2026
             </p>
             <div className="mt-8 flex flex-col items-center gap-3">
-              {CATS.filter(({ key }) => key === 'all').map(({ key, label, activeBg, activeShadow, activeBadge, icon }) => {
-                const isActive = filter === key;
-                const count = allCards.filter(c => key === 'all' || c.categoryKey === key).length;
-                return (
-                  <button
-                    key={key}
-                    onClick={() => setFilter(key)}
-                    className={`flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-sm ${
-                      isActive
-                        ? `${activeBg} shadow-md ${activeShadow}`
-                        : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
-                    }`}
-                  >
-                    <span className="flex-shrink-0">{icon}</span>
-                    {label}
-                    <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full ${
-                      isActive ? activeBadge : 'bg-slate-100 text-slate-500'
-                    }`}>
-                      {count}
-                    </span>
-                  </button>
-                );
-              })}
-              <div className="flex flex-wrap justify-center gap-2">
-                {CATS.filter(({ key }) => key !== 'all').map(({ key, label, activeBg, activeShadow, activeBadge, icon }) => {
-                  const isActive = filter === key;
-                  const count = allCards.filter(c => c.categoryKey === key).length;
-                  return (
-                    <button
-                      key={key}
-                      onClick={() => setFilter(key)}
-                      className={`flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-semibold transition-all shadow-sm ${
-                        isActive
-                          ? `${activeBg} shadow-md ${activeShadow}`
-                          : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
-                      }`}
-                    >
-                      <span className="flex-shrink-0">{icon}</span>
-                      {label}
-                      <span className={`text-xs font-bold px-1.5 py-0.5 rounded-full ${
-                        isActive ? activeBadge : 'bg-slate-100 text-slate-500'
-                      }`}>
-                        {count}
-                      </span>
-                    </button>
-                  );
-                })}
+              <div className="flex max-w-full flex-nowrap justify-center gap-2 overflow-x-auto pb-1">
+                {CATS.map(renderThinFilterButton)}
+              </div>
+              <div className="w-full max-w-md">
+                {CATS.filter(({ key }) => key === 'all').map(renderProgressFilterButton)}
+              </div>
+              <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                {CATS.filter(({ key }) => key !== 'all').map(renderProgressFilterButton)}
               </div>
             </div>
           </header>
-
-          {/* ── Progress Dashboard ── */}
-          <div className="mb-8 grid grid-cols-2 lg:grid-cols-4 gap-3">
-            {CATS.filter(c => c.key !== 'All').map(({ key, label, icon, barBg }) => {
-              const total = allCards.filter(c => c.categoryKey === key).length;
-              const revealed = allCards.filter(c => c.categoryKey === key && revealedCards.has(c.id)).length;
-              return (
-                <div key={key} className="bg-white rounded-xl p-4 shadow-sm border border-slate-100">
-                  <div className="flex items-center gap-1.5 text-slate-400 mb-2">
-                    <span className="flex-shrink-0">{icon}</span>
-                    <span className="text-xs font-semibold uppercase tracking-wide truncate">{label}</span>
-                  </div>
-                  <div className="flex items-baseline gap-1 mb-2.5">
-                    <span className="text-2xl font-extrabold text-slate-800">{revealed}</span>
-                    <span className="text-sm text-slate-400">/ {total} revealed</span>
-                  </div>
-                  <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all duration-500 ${barBg}`}
-                      style={{ width: `${Math.round((revealed / total) * 100)}%` }}
-                    />
-                  </div>
-                </div>
-              );
-            })}
-          </div>
 
           {/* ── Card Grid ── */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
