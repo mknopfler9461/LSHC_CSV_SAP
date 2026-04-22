@@ -1,7 +1,7 @@
 [
   {
     "key": "global",
-    "label": "Global CSV",
+    "label": "Global",
     "category": "Global SAP GxP & CSV",
     "cards": [
       {
@@ -265,7 +265,7 @@
   },
   {
     "key": "cloud",
-    "label": "Cloud (PCE)",
+    "label": "SAP",
     "category": "SAP S/4HANA Cloud (PCE)",
     "cards": [
       {
