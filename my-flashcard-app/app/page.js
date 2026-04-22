@@ -122,19 +122,20 @@ export default function FlashcardApp() {
     total === 0 ? 0 : Math.round((revealed / total) * 100)
   );
 
-  const renderThinFilterButton = ({ key, label }) => {
+  const renderThinFilterButton = ({ key, label, icon }) => {
     const isActive = filter === key;
 
     return (
       <button
         key={key}
         onClick={() => setFilter(key)}
-        className={`flex items-center gap-1.5 rounded-full border px-5 py-2 text-sm font-semibold shadow-sm transition-all ${
+        className={`flex h-[50px] w-[150px] items-center justify-center gap-1.5 rounded-full border text-sm font-semibold shadow-sm transition-all ${
           isActive
             ? 'border-slate-800 bg-slate-800 text-white shadow-sm'
             : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50'
         }`}
       >
+        <span className="flex-shrink-0">{icon}</span>
         {label}
       </button>
     );
@@ -149,7 +150,7 @@ export default function FlashcardApp() {
       <button
         key={key}
         onClick={() => setFilter(key)}
-        className={`w-full rounded-lg border p-4 text-left transition-all ${
+        className={`h-[120px] w-[300px] rounded-lg border p-4 text-left transition-all ${
           isActive
             ? `${activeBg} border-transparent shadow-md ${activeShadow}`
             : 'border-slate-100 bg-white text-slate-800 shadow-sm hover:border-blue-200 hover:bg-slate-50'
@@ -243,10 +244,10 @@ export default function FlashcardApp() {
               <div className="flex max-w-full flex-nowrap justify-center gap-2 overflow-x-auto pb-1">
                 {CATS.map(renderThinFilterButton)}
               </div>
-              <div className="grid w-full grid-cols-1 gap-3 sm:max-w-sm">
+              <div className="flex justify-center">
                 {CATS.filter(({ key }) => key === 'all').map(renderProgressFilterButton)}
               </div>
-              <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="flex flex-wrap justify-center gap-3">
                 {CATS.filter(({ key }) => key !== 'all').map(renderProgressFilterButton)}
               </div>
             </div>
