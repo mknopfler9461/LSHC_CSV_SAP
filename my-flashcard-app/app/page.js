@@ -150,7 +150,7 @@ export default function FlashcardApp() {
       <button
         key={key}
         onClick={() => setFilter(key)}
-        className={`h-[120px] w-[280px] rounded-lg border p-4 text-left transition-all ${
+        className={`h-[105px] w-[275px] rounded-lg border p-4 text-left transition-all ${
           isActive
             ? `${activeBg} border-transparent shadow-md ${activeShadow}`
             : 'border-slate-100 bg-white text-slate-800 shadow-sm hover:border-blue-200 hover:bg-slate-50'
