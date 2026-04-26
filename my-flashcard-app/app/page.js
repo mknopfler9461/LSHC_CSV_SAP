@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import flashcardData from '../data/flashcards.json';
 
 const allCards = flashcardData.flatMap(cat =>
@@ -86,9 +86,88 @@ const CATS = [
   },
 ];
 
+const SEARCH_ALIASES = {
+  cvs: ['csv'],
+  csv: ['cvs'],
+};
+
+const normalizeSearchText = (value) => (
+  String(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+);
+
+const hasAdjacentSwap = (source, target) => {
+  if (source.length !== target.length || source.length < 3) return false;
+
+  for (let index = 0; index < source.length - 1; index += 1) {
+    const swapped = `${source.slice(0, index)}${source[index + 1]}${source[index]}${source.slice(index + 2)}`;
+    if (swapped === target) return true;
+  }
+
+  return false;
+};
+
+const isCloseKeywordMatch = (term, word) => {
+  if (term.length < 3 || word.length < 3) return false;
+  if (word.includes(term)) return true;
+  if (term.length === word.length && hasAdjacentSwap(term, word)) return true;
+  if (term.length < 5 || Math.abs(term.length - word.length) > 1) return false;
+
+  let termIndex = 0;
+  let wordIndex = 0;
+  let edits = 0;
+
+  while (termIndex < term.length && wordIndex < word.length) {
+    if (term[termIndex] === word[wordIndex]) {
+      termIndex += 1;
+      wordIndex += 1;
+      continue;
+    }
+
+    edits += 1;
+    if (edits > 1) return false;
+
+    if (term.length > word.length) {
+      termIndex += 1;
+    } else if (word.length > term.length) {
+      wordIndex += 1;
+    } else {
+      termIndex += 1;
+      wordIndex += 1;
+    }
+  }
+
+  return edits + (term.length - termIndex) + (word.length - wordIndex) <= 1;
+};
+
+const cardMatchesSearch = (card, query) => {
+  const terms = normalizeSearchText(query).split(' ').filter(Boolean);
+  if (terms.length === 0) return true;
+
+  const searchableText = normalizeSearchText([
+    card.question,
+    card.answer,
+    card.category,
+    card.categoryKey,
+  ].join(' '));
+  const searchableWords = searchableText.split(' ').filter(Boolean);
+
+  return terms.every((term) => {
+    const relatedTerms = [term, ...(SEARCH_ALIASES[term] || [])];
+
+    return relatedTerms.some((relatedTerm) => (
+      searchableText.includes(relatedTerm)
+      || searchableWords.some(word => isCloseKeywordMatch(relatedTerm, word))
+    ));
+  });
+};
+
 export default function FlashcardApp() {
   const [showCover, setShowCover] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   const [flippedCards, setFlippedCards] = useState({});
   const [revealedCards, setRevealedCards] = useState(new Set());
 
@@ -102,9 +181,12 @@ export default function FlashcardApp() {
     });
   };
 
-  const filteredCards = filter === 'all'
-    ? allCards
-    : allCards.filter(c => c.categoryKey === filter);
+  const filteredCards = useMemo(() => (
+    allCards.filter(card => (
+      (filter === 'all' || card.categoryKey === filter)
+      && cardMatchesSearch(card, searchQuery)
+    ))
+  ), [filter, searchQuery]);
 
   const getCategoryTotal = (key) => (
     key === 'all'
@@ -241,6 +323,22 @@ export default function FlashcardApp() {
               Project Wiki for Regulatory Compliance prepared by Mark &amp; Xincheng, April 2026
             </p>
             <div className="mt-8 flex flex-col items-center gap-3">
+              <div className="relative w-full max-w-2xl">
+                <span className="pointer-events-none absolute left-4 top-1/2 flex -translate-y-1/2 text-slate-400">
+                  <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                    <circle cx="9" cy="9" r="5.5" />
+                    <path d="M13.5 13.5L17 17" />
+                  </svg>
+                </span>
+                <input
+                  type="search"
+                  value={searchQuery}
+                  onChange={event => setSearchQuery(event.target.value)}
+                  placeholder="Search GxP, CSV, FDA, NMPA..."
+                  aria-label="Search flashcards"
+                  className="h-12 w-full rounded-full border border-slate-200 bg-white pl-12 pr-4 text-sm font-medium text-slate-700 shadow-sm outline-none transition focus:border-blue-300 focus:ring-4 focus:ring-blue-100"
+                />
+              </div>
               <div className="flex max-w-full flex-nowrap justify-center gap-2 overflow-x-auto pb-1">
                 {CATS.map(renderThinFilterButton)}
               </div>
@@ -254,8 +352,9 @@ export default function FlashcardApp() {
           </header>
 
           {/* ── Card Grid ── */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCards.map((card, index) => (
+          {filteredCards.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredCards.map((card, index) => (
               <div
                 key={card.id}
                 onClick={() => toggleFlip(card.id)}
@@ -303,8 +402,14 @@ export default function FlashcardApp() {
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-slate-200 bg-white px-6 py-14 text-center shadow-sm">
+              <p className="text-lg font-bold text-slate-800">No flashcards found</p>
+              <p className="mt-2 text-sm text-slate-500">Try another business keyword or switch category.</p>
+            </div>
+          )}
         </div>
       </div>
     </>
