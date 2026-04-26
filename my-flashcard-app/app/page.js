@@ -2,22 +2,52 @@
 import React, { useMemo, useState } from 'react';
 import flashcardData from '../data/flashcards.json';
 
-const allCards = flashcardData.flatMap(cat =>
-  cat.cards.map(card => ({
-    ...card,
-    category: cat.category,
-    categoryKey: cat.key,
-  }))
-);
+const UI_TEXT = {
+  en: {
+    languageName: 'English',
+    viewAll: 'View All',
+    coverEyebrow: 'Life Sciences & Healthcare · SAP Consulting',
+    coverTitleTop: 'SAP CSV & GxP',
+    coverTitleAccent: 'Compliance',
+    coverStats: (cards, domains) => `${cards} knowledge cards across ${domains} compliance domains`,
+    begin: 'Begin ->',
+    prepared: 'Prepared by Mark & Xincheng · April 2026',
+    pageTitle: 'SAP CSV & GxP in LSHC',
+    pageSubtitle: 'Project Wiki for Regulatory Compliance prepared by Mark & Xincheng, April 2026',
+    searchPlaceholder: 'Search GxP, CSV, FDA, NMPA...',
+    searchLabel: 'Search flashcards',
+    revealed: 'revealed',
+    clickReveal: 'Click to Reveal',
+    clickBack: 'Click to Flip Back',
+    noCardsTitle: 'No flashcards found',
+    noCardsBody: 'Try another business keyword or switch category.',
+    categoryJoiner: ' · ',
+  },
+  zh: {
+    languageName: '简体中文',
+    viewAll: '查看全部',
+    coverEyebrow: '生命科学与医疗健康 · SAP 咨询',
+    coverTitleTop: 'SAP CSV & GxP',
+    coverTitleAccent: '合规知识卡',
+    coverStats: (cards, domains) => `${cards} 张知识卡，覆盖 ${domains} 个合规领域`,
+    begin: '开始 ->',
+    prepared: 'Mark 与 Xincheng 准备 · 2026年4月',
+    pageTitle: '生命科学医疗行业 SAP CSV & GxP',
+    pageSubtitle: '监管合规项目 Wiki，由 Mark 与 Xincheng 准备，2026年4月',
+    searchPlaceholder: '搜索 GxP、CSV、FDA、NMPA、验证...',
+    searchLabel: '搜索知识卡',
+    revealed: '已揭示',
+    clickReveal: '点击查看答案',
+    clickBack: '点击翻回问题',
+    noCardsTitle: '没有找到知识卡',
+    noCardsBody: '请尝试其他业务关键词，或切换分类。',
+    categoryJoiner: ' · ',
+  },
+};
 
-const categoryLabels = Object.fromEntries(
-  flashcardData.map(({ key, label }) => [key, label])
-);
-
-const CATS = [
+const CATEGORY_STYLES = [
   {
     key: 'all',
-    label: 'View All',
     activeBg: 'bg-slate-700 text-white',
     activeShadow: 'shadow-slate-300',
     activeBadge: 'bg-slate-600 text-white',
@@ -30,7 +60,6 @@ const CATS = [
   },
   {
     key: 'global',
-    label: categoryLabels.global,
     activeBg: 'bg-blue-600 text-white',
     activeShadow: 'shadow-blue-200',
     activeBadge: 'bg-blue-500 text-white',
@@ -45,7 +74,6 @@ const CATS = [
   },
   {
     key: 'china',
-    label: categoryLabels.china,
     activeBg: 'bg-rose-600 text-white',
     activeShadow: 'shadow-rose-200',
     activeBadge: 'bg-rose-500 text-white',
@@ -59,7 +87,6 @@ const CATS = [
   },
   {
     key: 'cloud',
-    label: categoryLabels.cloud,
     activeBg: 'bg-sky-500 text-white',
     activeShadow: 'shadow-sky-200',
     activeBadge: 'bg-sky-400 text-white',
@@ -72,7 +99,6 @@ const CATS = [
   },
   {
     key: 'architecture',
-    label: categoryLabels.architecture,
     activeBg: 'bg-violet-600 text-white',
     activeShadow: 'shadow-violet-200',
     activeBadge: 'bg-violet-500 text-white',
@@ -91,10 +117,20 @@ const SEARCH_ALIASES = {
   csv: ['cvs'],
 };
 
+const getCards = (categories) => (
+  categories.flatMap(cat =>
+    cat.cards.map(card => ({
+      ...card,
+      category: cat.category,
+      categoryKey: cat.key,
+    }))
+  )
+);
+
 const normalizeSearchText = (value) => (
   String(value)
     .toLowerCase()
-    .replace(/[^a-z0-9]+/g, ' ')
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
     .trim()
 );
 
@@ -166,10 +202,33 @@ const cardMatchesSearch = (card, query) => {
 
 export default function FlashcardApp() {
   const [showCover, setShowCover] = useState(true);
+  const [locale, setLocale] = useState(flashcardData.defaultLocale);
   const [filter, setFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [flippedCards, setFlippedCards] = useState({});
   const [revealedCards, setRevealedCards] = useState(new Set());
+
+  const availableLocales = Object.keys(flashcardData.locales);
+  const categories = flashcardData.locales[locale] || flashcardData.locales[flashcardData.defaultLocale];
+  const ui = UI_TEXT[locale] || UI_TEXT.en;
+
+  const allCards = useMemo(() => getCards(categories), [categories]);
+  const categoryLabels = useMemo(
+    () => Object.fromEntries(categories.map(({ key, label }) => [key, label])),
+    [categories]
+  );
+  const cats = useMemo(() => (
+    CATEGORY_STYLES.map((category) => ({
+      ...category,
+      label: category.key === 'all' ? ui.viewAll : categoryLabels[category.key],
+    }))
+  ), [categoryLabels, ui.viewAll]);
+
+  const switchLocale = (nextLocale) => {
+    setLocale(nextLocale);
+    setSearchQuery('');
+    setFlippedCards({});
+  };
 
   const toggleFlip = (id) => {
     setFlippedCards(prev => ({ ...prev, [id]: !prev[id] }));
@@ -186,7 +245,7 @@ export default function FlashcardApp() {
       (filter === 'all' || card.categoryKey === filter)
       && cardMatchesSearch(card, searchQuery)
     ))
-  ), [filter, searchQuery]);
+  ), [allCards, filter, searchQuery]);
 
   const getCategoryTotal = (key) => (
     key === 'all'
@@ -204,6 +263,37 @@ export default function FlashcardApp() {
     total === 0 ? 0 : Math.round((revealed / total) * 100)
   );
 
+  const renderLanguageSwitch = (variant = 'light') => (
+    <div className={`inline-flex rounded-full border p-1 text-xs font-bold ${
+      variant === 'dark'
+        ? 'border-white/10 bg-white/5 text-slate-300'
+        : 'border-slate-200 bg-white text-slate-500 shadow-sm'
+    }`}>
+      {availableLocales.map((option) => {
+        const isActive = locale === option;
+
+        return (
+          <button
+            key={option}
+            type="button"
+            onClick={() => switchLocale(option)}
+            className={`h-8 rounded-full px-4 transition ${
+              isActive
+                ? variant === 'dark'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-slate-900 text-white'
+                : variant === 'dark'
+                  ? 'text-slate-400 hover:text-white'
+                  : 'text-slate-500 hover:text-slate-900'
+            }`}
+          >
+            {UI_TEXT[option]?.languageName || option}
+          </button>
+        );
+      })}
+    </div>
+  );
+
   const renderThinFilterButton = ({ key, label, icon }) => {
     const isActive = filter === key;
 
@@ -218,7 +308,7 @@ export default function FlashcardApp() {
         }`}
       >
         <span className="flex-shrink-0">{icon}</span>
-        {label}
+        <span className="truncate">{label}</span>
       </button>
     );
   };
@@ -244,7 +334,7 @@ export default function FlashcardApp() {
         </div>
         <div className="mb-2.5 flex items-baseline gap-1">
           <span className={`text-2xl font-extrabold ${isActive ? 'text-white' : 'text-slate-800'}`}>{revealed}</span>
-          <span className={`text-sm ${isActive ? 'text-white/70' : 'text-slate-400'}`}>/ {total} revealed</span>
+          <span className={`text-sm ${isActive ? 'text-white/70' : 'text-slate-400'}`}>/ {total} {ui.revealed}</span>
         </div>
         <div className={`h-1.5 overflow-hidden rounded-full ${isActive ? 'bg-white/25' : 'bg-slate-100'}`}>
           <div
@@ -258,20 +348,18 @@ export default function FlashcardApp() {
 
   return (
     <>
-      {/* ── Cover Slide ── */}
       {showCover && (
-        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-slate-900 overflow-hidden">
-          {/* radial blue glow */}
+        <div className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-slate-900">
+          <div className="absolute right-5 top-5 z-10">{renderLanguageSwitch('dark')}</div>
           <div
-            className="absolute inset-0 pointer-events-none"
+            className="pointer-events-none absolute inset-0"
             style={{
               background:
                 'radial-gradient(ellipse 80% 60% at 50% 50%, rgba(37,99,235,0.18) 0%, transparent 70%)',
             }}
           />
-          {/* subtle grid overlay */}
           <div
-            className="absolute inset-0 pointer-events-none opacity-[0.04]"
+            className="pointer-events-none absolute inset-0 opacity-[0.04]"
             style={{
               backgroundImage:
                 'linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)',
@@ -279,48 +367,48 @@ export default function FlashcardApp() {
             }}
           />
 
-          <div className="relative text-center text-white max-w-2xl px-8">
-            <span className="text-xs uppercase tracking-[0.35em] text-blue-400 font-bold block mb-8">
-              Life Sciences &amp; Healthcare · SAP Consulting
+          <div className="relative max-w-2xl px-8 text-center text-white">
+            <span className="mb-8 block text-xs font-bold uppercase tracking-[0.35em] text-blue-400">
+              {ui.coverEyebrow}
             </span>
 
-            <h1 className="text-5xl sm:text-6xl font-extrabold tracking-tight leading-tight mb-6">
-              SAP CSV &amp; GxP
+            <h1 className="mb-6 text-5xl font-extrabold leading-tight tracking-tight sm:text-6xl">
+              {ui.coverTitleTop}
               <br />
-              <span className="text-blue-400">Compliance</span>
+              <span className="text-blue-400">{ui.coverTitleAccent}</span>
             </h1>
 
-            <p className="text-slate-300 text-lg mb-3">
-              {allCards.length} knowledge cards across {flashcardData.length} compliance domains
+            <p className="mb-3 text-lg text-slate-300">
+              {ui.coverStats(allCards.length, categories.length)}
             </p>
-            <p className="text-slate-500 text-sm mb-10">
-              {flashcardData.map(({ category }) => category).join(' · ')}
+            <p className="mb-10 text-sm text-slate-500">
+              {categories.map(({ category }) => category).join(ui.categoryJoiner)}
             </p>
 
             <button
               onClick={() => setShowCover(false)}
-              className="px-10 py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-full text-sm uppercase tracking-widest transition-all duration-300"
+              className="rounded-full bg-blue-600 px-10 py-4 text-sm font-bold uppercase tracking-widest text-white transition-all duration-300 hover:bg-blue-500"
               style={{ boxShadow: '0 0 30px rgba(37,99,235,0.4)' }}
             >
-              Begin &rarr;
+              {ui.begin}
             </button>
 
-            <p className="mt-10 text-slate-600 text-xs tracking-wide">
-              Prepared by Mark &amp; Xincheng &nbsp;·&nbsp; April 2026
+            <p className="mt-10 text-xs tracking-wide text-slate-600">
+              {ui.prepared}
             </p>
           </div>
         </div>
       )}
 
-      {/* ── Main App ── */}
-      <div className="min-h-screen bg-slate-50 py-12 px-4 font-sans">
-        <div className="max-w-6xl mx-auto">
-          <header className="text-center mb-12">
-            <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">
-              SAP CSV &amp; GxP in LSHC
+      <div className="min-h-screen bg-slate-50 px-4 py-12 font-sans">
+        <div className="mx-auto max-w-6xl">
+          <header className="mb-12 text-center">
+            <div className="mb-6 flex justify-center">{renderLanguageSwitch()}</div>
+            <h1 className="text-4xl font-extrabold tracking-tight text-slate-900">
+              {ui.pageTitle}
             </h1>
             <p className="mt-2 text-slate-500">
-              Project Wiki for Regulatory Compliance prepared by Mark &amp; Xincheng, April 2026
+              {ui.pageSubtitle}
             </p>
             <div className="mt-8 flex flex-col items-center gap-3">
               <div className="relative w-full max-w-2xl">
@@ -334,80 +422,76 @@ export default function FlashcardApp() {
                   type="search"
                   value={searchQuery}
                   onChange={event => setSearchQuery(event.target.value)}
-                  placeholder="Search GxP, CSV, FDA, NMPA..."
-                  aria-label="Search flashcards"
+                  placeholder={ui.searchPlaceholder}
+                  aria-label={ui.searchLabel}
                   className="h-12 w-full rounded-full border border-slate-200 bg-white pl-12 pr-4 text-sm font-medium text-slate-700 shadow-sm outline-none transition focus:border-blue-300 focus:ring-4 focus:ring-blue-100"
                 />
               </div>
               <div className="flex max-w-full flex-nowrap justify-center gap-2 overflow-x-auto pb-1">
-                {CATS.map(renderThinFilterButton)}
+                {cats.map(renderThinFilterButton)}
               </div>
               <div className="flex justify-center">
-                {CATS.filter(({ key }) => key === 'all').map(renderProgressFilterButton)}
+                {cats.filter(({ key }) => key === 'all').map(renderProgressFilterButton)}
               </div>
               <div className="flex flex-wrap justify-center gap-3">
-                {CATS.filter(({ key }) => key !== 'all').map(renderProgressFilterButton)}
+                {cats.filter(({ key }) => key !== 'all').map(renderProgressFilterButton)}
               </div>
             </div>
           </header>
 
-          {/* ── Card Grid ── */}
           {filteredCards.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {filteredCards.map((card, index) => (
-              <div
-                key={card.id}
-                onClick={() => toggleFlip(card.id)}
-                className="h-56 cursor-pointer perspective card-enter"
-                style={{ animationDelay: `${Math.min(index * 0.05, 0.6)}s` }}
-              >
-                {/* flip container */}
                 <div
-                  className="relative w-full h-full transition-transform duration-500"
-                  style={{
-                    transformStyle: 'preserve-3d',
-                    transform: flippedCards[card.id] ? 'rotateY(180deg)' : 'rotateY(0deg)',
-                  }}
+                  key={card.id}
+                  onClick={() => toggleFlip(card.id)}
+                  className="card-enter h-56 cursor-pointer perspective"
+                  style={{ animationDelay: `${Math.min(index * 0.05, 0.6)}s` }}
                 >
-                  {/* Front face — question */}
-                  <div className="absolute inset-0 backface-hidden rounded-2xl p-6 flex items-center justify-center text-center bg-white border-2 border-slate-100 text-slate-800 shadow-sm hover:border-blue-200 hover:-translate-y-1 transition-transform duration-200">
-                    <div>
-                      <span className="text-[10px] uppercase font-black tracking-widest block mb-3 text-blue-500">
-                        {card.category}
-                      </span>
-                      <p className="text-base leading-snug font-semibold">{card.question}</p>
-                      <p className="mt-4 text-[10px] font-bold uppercase opacity-40">
-                        Click to Reveal
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Back face — answer */}
                   <div
-                    className="absolute inset-0 backface-hidden rounded-2xl p-6 flex items-center justify-center text-center bg-blue-600 text-white shadow-xl"
+                    className="relative h-full w-full transition-transform duration-500"
                     style={{
-                      transform: 'rotateY(180deg)',
-                      boxShadow: '0 8px 30px rgba(37,99,235,0.25)',
+                      transformStyle: 'preserve-3d',
+                      transform: flippedCards[card.id] ? 'rotateY(180deg)' : 'rotateY(0deg)',
                     }}
                   >
-                    <div>
-                      <span className="text-[10px] uppercase font-black tracking-widest block mb-3 text-blue-200">
-                        {card.category}
-                      </span>
-                      <p className="text-base leading-snug font-semibold">{card.answer}</p>
-                      <p className="mt-4 text-[10px] font-bold uppercase opacity-40">
-                        Click to Flip Back
-                      </p>
+                    <div className="backface-hidden absolute inset-0 flex items-center justify-center rounded-2xl border-2 border-slate-100 bg-white p-6 text-center text-slate-800 shadow-sm transition-transform duration-200 hover:-translate-y-1 hover:border-blue-200">
+                      <div>
+                        <span className="mb-3 block text-[10px] font-black uppercase tracking-widest text-blue-500">
+                          {card.category}
+                        </span>
+                        <p className="text-base font-semibold leading-snug">{card.question}</p>
+                        <p className="mt-4 text-[10px] font-bold uppercase opacity-40">
+                          {ui.clickReveal}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div
+                      className="backface-hidden absolute inset-0 flex items-center justify-center rounded-2xl bg-blue-600 p-6 text-center text-white shadow-xl"
+                      style={{
+                        transform: 'rotateY(180deg)',
+                        boxShadow: '0 8px 30px rgba(37,99,235,0.25)',
+                      }}
+                    >
+                      <div>
+                        <span className="mb-3 block text-[10px] font-black uppercase tracking-widest text-blue-200">
+                          {card.category}
+                        </span>
+                        <p className="text-base font-semibold leading-snug">{card.answer}</p>
+                        <p className="mt-4 text-[10px] font-bold uppercase opacity-40">
+                          {ui.clickBack}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
               ))}
             </div>
           ) : (
             <div className="rounded-2xl border border-dashed border-slate-200 bg-white px-6 py-14 text-center shadow-sm">
-              <p className="text-lg font-bold text-slate-800">No flashcards found</p>
-              <p className="mt-2 text-sm text-slate-500">Try another business keyword or switch category.</p>
+              <p className="text-lg font-bold text-slate-800">{ui.noCardsTitle}</p>
+              <p className="mt-2 text-sm text-slate-500">{ui.noCardsBody}</p>
             </div>
           )}
         </div>

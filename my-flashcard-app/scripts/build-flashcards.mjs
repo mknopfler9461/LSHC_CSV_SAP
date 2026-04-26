@@ -4,7 +4,9 @@ import process from "node:process";
 
 const wikiDir = path.join(process.cwd(), "data", "wiki");
 const outputPath = path.join(process.cwd(), "data", "flashcards.json");
-const allowedKeys = new Set(["global", "china", "cloud", "architecture"]);
+const keyOrder = ["global", "china", "cloud", "architecture"];
+const allowedKeys = new Set(keyOrder);
+const localeOrder = ["en", "zh"];
 
 const files = fs
   .readdirSync(wikiDir)
@@ -16,7 +18,10 @@ if (files.length === 0) {
 }
 
 let nextId = 1;
-const seenKeys = new Set();
+
+function getLocale(file) {
+  return file.toLowerCase().endsWith("-zh.md") ? "zh" : "en";
+}
 
 function parseFrontmatter(source, file) {
   const match = source.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n/);
@@ -52,12 +57,6 @@ function parseFrontmatter(source, file) {
     );
   }
 
-  if (seenKeys.has(metadata.key)) {
-    throw new Error(`${file}: duplicate key "${metadata.key}".`);
-  }
-
-  seenKeys.add(metadata.key);
-
   return {
     body,
     key: metadata.key,
@@ -65,9 +64,25 @@ function parseFrontmatter(source, file) {
   };
 }
 
-const categories = files.map((file) => {
+const categoriesByLocale = Object.fromEntries(localeOrder.map((locale) => [locale, []]));
+const seenKeysByLocale = Object.fromEntries(localeOrder.map((locale) => [locale, new Set()]));
+
+for (const file of files) {
+  const locale = getLocale(file);
+
+  if (!categoriesByLocale[locale]) {
+    throw new Error(`${file}: unsupported locale "${locale}".`);
+  }
+
   const source = fs.readFileSync(path.join(wikiDir, file), "utf8").trim();
   const { body, key, label } = parseFrontmatter(source, file);
+
+  if (seenKeysByLocale[locale].has(key)) {
+    throw new Error(`${file}: duplicate key "${key}" for locale "${locale}".`);
+  }
+
+  seenKeysByLocale[locale].add(key);
+
   const lines = body.split(/\r?\n/);
   const titleLine = lines.find((line) => line.startsWith("# "));
 
@@ -82,7 +97,7 @@ const categories = files.map((file) => {
     throw new Error(`${file}: missing cards. Add cards using "## Question" headings.`);
   }
 
-  const cards = cardBlocks.map((block) => {
+  const cards = cardBlocks.map((block, index) => {
     const [questionLine, ...answerLines] = block.trim().split(/\r?\n/);
     const question = questionLine.replace(/^##\s+/, "").trim();
     const answer = answerLines.join("\n").trim();
@@ -96,26 +111,55 @@ const categories = files.map((file) => {
     }
 
     return {
-      id: nextId++,
+      id: `${key}-${index + 1}`,
       question,
       answer,
     };
   });
 
-  return {
+  categoriesByLocale[locale].push({
     key,
     label,
     category,
     cards,
-  };
-});
+  });
 
-for (const key of allowedKeys) {
-  if (!seenKeys.has(key)) {
-    throw new Error(`Missing category metadata for key "${key}".`);
+  nextId += cards.length;
+}
+
+for (const locale of localeOrder) {
+  categoriesByLocale[locale].sort((a, b) => keyOrder.indexOf(a.key) - keyOrder.indexOf(b.key));
+}
+
+for (const locale of localeOrder) {
+  for (const key of allowedKeys) {
+    if (!seenKeysByLocale[locale].has(key)) {
+      throw new Error(`Missing category metadata for key "${key}" in locale "${locale}".`);
+    }
   }
 }
 
-fs.writeFileSync(outputPath, `${JSON.stringify(categories, null, 2)}\n`);
+for (const key of keyOrder) {
+  const englishCategory = categoriesByLocale.en.find((category) => category.key === key);
 
-console.log(`Built ${nextId - 1} flashcards across ${categories.length} categories.`);
+  for (const locale of localeOrder.filter((value) => value !== "en")) {
+    const translatedCategory = categoriesByLocale[locale].find((category) => category.key === key);
+
+    if (translatedCategory.cards.length !== englishCategory.cards.length) {
+      throw new Error(
+        `${key}: locale "${locale}" has ${translatedCategory.cards.length} cards, expected ${englishCategory.cards.length}.`
+      );
+    }
+  }
+}
+
+const flashcards = {
+  defaultLocale: "en",
+  locales: categoriesByLocale,
+};
+
+fs.writeFileSync(outputPath, `${JSON.stringify(flashcards, null, 2)}\n`);
+
+console.log(
+  `Built ${nextId - 1} localized flashcards across ${keyOrder.length} categories and ${localeOrder.length} locales.`
+);

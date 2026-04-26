@@ -1,530 +1,1065 @@
-[
-  {
-    "key": "global",
-    "label": "Global",
-    "category": "Global SAP GxP & CSV",
-    "cards": [
+{
+  "defaultLocale": "en",
+  "locales": {
+    "en": [
       {
-        "id": 1,
-        "question": "What is the primary goal of Computer System Validation (CSV) in SAP projects?",
-        "answer": "To provide documented evidence that the SAP system consistently performs according to its intended use and meets GxP regulatory requirements."
+        "key": "global",
+        "label": "Global CSV",
+        "category": "Global SAP GxP & CSV",
+        "cards": [
+          {
+            "id": "global-1",
+            "question": "What is the primary goal of Computer System Validation (CSV) in SAP projects?",
+            "answer": "To provide documented evidence that the SAP system consistently performs according to its intended use and meets GxP regulatory requirements."
+          },
+          {
+            "id": "global-2",
+            "question": "Explain the relationship between CSV and GxP.",
+            "answer": "CSV is the process used to ensure that computerized systems (like SAP) comply with GxP (Good Practice) regulations, such as GMP, GDP, and GCP."
+          },
+          {
+            "id": "global-3",
+            "question": "What is the 'V-Model' in the context of SAP CSV?",
+            "answer": "A SDLC framework that maps requirements (User Requirements, Functional Specs) directly to their corresponding testing phases (IQ, OQ, PQ)."
+          },
+          {
+            "id": "global-4",
+            "question": "What does GAMP 5 stand for, and why is it important?",
+            "answer": "Good Automated Manufacturing Practice (Version 5); it is the industry-standard risk-based approach for compliant GxP computerized systems."
+          },
+          {
+            "id": "global-5",
+            "question": "How does CSV impact the SAP Blueprinting phase?",
+            "answer": "It requires the early definition of User Requirements (URS) and a Risk Assessment to determine which SAP processes are GxP-relevant."
+          },
+          {
+            "id": "global-6",
+            "question": "What are the common pitfalls in SAP CSV projects?",
+            "answer": "Underestimating documentation effort, lack of early QA involvement, and failing to define clear system boundaries."
+          },
+          {
+            "id": "global-7",
+            "question": "What is an Installation Qualification (IQ)?",
+            "answer": "Evidence that the SAP software and hardware infrastructure are installed correctly according to specifications."
+          },
+          {
+            "id": "global-8",
+            "question": "What is an Operational Qualification (OQ)?",
+            "answer": "Functional testing to verify that the SAP system operates as intended across all operational ranges."
+          },
+          {
+            "id": "global-9",
+            "question": "What is a Performance Qualification (PQ)?",
+            "answer": "Testing the integrated SAP system under real-world conditions to ensure it consistently meets performance criteria."
+          },
+          {
+            "id": "global-10",
+            "question": "Why is 'Electronic Signature' (21 CFR Part 11) critical in SAP CSV?",
+            "answer": "It ensures that digital approvals in SAP are as legally binding and traceable as handwritten signatures."
+          },
+          {
+            "id": "global-11",
+            "question": "What is the purpose of a Traceability Matrix (TM)?",
+            "answer": "To link each requirement (URS) to its functional design (FS), technical build, and final test case (OQ/PQ) for audit readiness."
+          },
+          {
+            "id": "global-12",
+            "question": "How does 'Data Integrity' apply to SAP CSV?",
+            "answer": "It follows the ALCOA+ principles (Attributable, Legible, Contemporaneous, Original, Accurate) to ensure data is trustworthy throughout its lifecycle."
+          },
+          {
+            "id": "global-13",
+            "question": "What is a 'Validation Summary Report' (VSR)?",
+            "answer": "The final document that summarizes the validation activities and confirms the system is 'Live' and compliant."
+          },
+          {
+            "id": "global-14",
+            "question": "What is the 'intended use' principle?",
+            "answer": "The core of CSV; validation is not about the software's features, but whether it works for the specific business process it was designed for."
+          },
+          {
+            "id": "global-15",
+            "question": "How does Change Management intersect with CSV?",
+            "answer": "Any post-go-live change to a validated SAP system must undergo a formal impact assessment and re-validation if GxP-relevant."
+          },
+          {
+            "id": "global-16",
+            "question": "What is Category 4 vs Category 5 in GAMP 5?",
+            "answer": "Category 4 is configured software (standard SAP), while Category 5 is custom-coded software (ABAP developments)."
+          },
+          {
+            "id": "global-17",
+            "question": "What is a Functional Risk Assessment (FRA)?",
+            "answer": "A step to identify which specific SAP functions carry high risk to patient safety or product quality."
+          },
+          {
+            "id": "global-18",
+            "question": "Who is responsible for the final 'release' of a validated system?",
+            "answer": "The Quality Unit (QA) and the System Owner."
+          },
+          {
+            "id": "global-19",
+            "question": "What are peripheral systems in SAP CSV?",
+            "answer": "External systems (LIMS, MES, WMS) that exchange GxP data with SAP and require interface validation."
+          },
+          {
+            "id": "global-20",
+            "question": "Define 'Legacy System Migration' in CSV.",
+            "answer": "The process of moving GxP data from an old system to SAP while maintaining data integrity and audit trails."
+          },
+          {
+            "id": "global-21",
+            "question": "What is 'Retrospective Validation'?",
+            "answer": "Validating an existing system that is already in use but lacks full documentation (rarely recommended today)."
+          },
+          {
+            "id": "global-22",
+            "question": "What is a Validation Plan (VP)?",
+            "answer": "The roadmap defining the scope, responsibilities, and acceptance criteria for the entire SAP validation project."
+          },
+          {
+            "id": "global-23",
+            "question": "What is a 'Critical Process Parameter' (CPP)?",
+            "answer": "A parameter in SAP (like a temperature setpoint) that must be monitored and validated as it impacts product quality."
+          },
+          {
+            "id": "global-24",
+            "question": "What is 'Vendor Audit' in the context of CSV?",
+            "answer": "Assessing SAP or a hosting provider to ensure their software development and quality management systems are GxP-compliant."
+          },
+          {
+            "id": "global-25",
+            "question": "What is 'Audit Trail Review'?",
+            "answer": "A periodic check of SAP logs to ensure users are not bypassing GxP controls."
+          }
+        ]
       },
       {
-        "id": 2,
-        "question": "Explain the relationship between CSV and GxP.",
-        "answer": "CSV is the process used to ensure that computerized systems (like SAP) comply with GxP (Good Practice) regulations, such as GMP, GDP, and GCP."
+        "key": "china",
+        "label": "China",
+        "category": "China Compliance in GxP & CSV",
+        "cards": [
+          {
+            "id": "china-1",
+            "question": "What is MLPS 2.0 and its relevance to SAP in China?",
+            "answer": "The Multi-Level Protection Scheme; SAP systems in China must be graded and certified (usually Level 3) for cybersecurity."
+          },
+          {
+            "id": "china-2",
+            "question": "How does PIPL affect SAP user data?",
+            "answer": "Personal Information Protection Law; requires explicit consent and strict controls for any PII stored in or transferred from SAP China."
+          },
+          {
+            "id": "china-3",
+            "question": "What is the 'Golden Tax' integration requirement?",
+            "answer": "SAP China must integrate with the government's tax system for fapiao (invoice) issuance and validation."
+          },
+          {
+            "id": "china-4",
+            "question": "What is the NMPA's stance on SAP CSV?",
+            "answer": "The National Medical Products Administration (China's FDA) requires strict CSV for any SAP system used in drug or device manufacturing."
+          },
+          {
+            "id": "china-5",
+            "question": "What is 'Data Localization' for SAP China?",
+            "answer": "Critical business and personal data generated in China must be stored on servers physically located within China."
+          },
+          {
+            "id": "china-6",
+            "question": "Define 'Cross-Border Data Transfer' (CBDT) in SAP.",
+            "answer": "The legal process of moving data from SAP China to a global HQ, requiring a security assessment by the CAC."
+          },
+          {
+            "id": "china-7",
+            "question": "What is the CAC?",
+            "answer": "Cyberspace Administration of China; the primary regulator for data security and PIPL compliance."
+          },
+          {
+            "id": "china-8",
+            "question": "How does the 'Data Security Law' (DSL) impact SAP projects?",
+            "answer": "It categorizes data and mandates protections based on the impact on national security."
+          },
+          {
+            "id": "china-9",
+            "question": "What is 'MLPS Filing'?",
+            "answer": "The formal process of submitting SAP system security designs to the local Public Security Bureau for approval."
+          },
+          {
+            "id": "china-10",
+            "question": "What is an 'Appointed Third-Party' audit in China CSV?",
+            "answer": "Engaging a China-certified agency to audit the SAP system’s cybersecurity (MLPS) compliance."
+          },
+          {
+            "id": "china-11",
+            "question": "Does SAP China require a 'GB' (Guobiao) standard check?",
+            "answer": "Yes, technical validation often includes checking against specific 'GB' national standards for encryption and security."
+          },
+          {
+            "id": "china-12",
+            "question": "How are 'Fapiao' audits conducted in a validated SAP environment?",
+            "answer": "Validation must prove that the SAP-to-Golden-Tax interface is accurate and tamper-proof."
+          },
+          {
+            "id": "china-13",
+            "question": "What is 'Sensitive Personal Information' under PIPL?",
+            "answer": "Biometric data, medical history, or financial info in SAP that requires even higher levels of protection and consent."
+          },
+          {
+            "id": "china-14",
+            "question": "What is 'De-identification' in SAP China reporting?",
+            "answer": "Removing PII from SAP data before sending it to global dashboards to comply with localization laws."
+          },
+          {
+            "id": "china-15",
+            "question": "What is the 'Cryptographic Law' of China?",
+            "answer": "Requires that SAP systems use government-approved encryption algorithms for data storage and transmission."
+          },
+          {
+            "id": "china-16",
+            "question": "What is a 'Data Protection Impact Assessment' (DPIA)?",
+            "answer": "A mandatory PIPL step to assess risks before processing sensitive data in SAP."
+          },
+          {
+            "id": "china-17",
+            "question": "How does 'NMPA Annex 1' apply to SAP?",
+            "answer": "It provides specific guidelines for computerized systems used in pharmaceutical manufacturing."
+          },
+          {
+            "id": "china-18",
+            "question": "What is the 'Cybersecurity Review' for SAP PCE in China?",
+            "answer": "A review required if an SAP project involves purchasing critical network products that could affect national security."
+          },
+          {
+            "id": "china-19",
+            "question": "What is 'Localization Validation'?",
+            "answer": "Validating the specific SAP China Add-on or local patches that are not part of the global core."
+          },
+          {
+            "id": "china-20",
+            "question": "What is 'Joint and Several Liability' in PIPL?",
+            "answer": "Both the customer and SAP (if it is a service provider) can be held liable for data breaches in the cloud."
+          },
+          {
+            "id": "china-21",
+            "question": "What is 'Self-Assessment' for data export?",
+            "answer": "The internal review a company must do before asking the government for permission to export SAP data."
+          },
+          {
+            "id": "china-22",
+            "question": "How is 'Audit Trail' compliance checked by NMPA?",
+            "answer": "Inspectors look for un-editable logs of every data entry, modification, and deletion in SAP."
+          },
+          {
+            "id": "china-23",
+            "question": "What is 'Network Security Domain' in MLPS?",
+            "answer": "Structuring the SAP network into zones (Production, DMZ) with validated firewalls between them."
+          },
+          {
+            "id": "china-24",
+            "question": "What is the 'Designated Data Handler'?",
+            "answer": "The specific entity in China legally responsible for the SAP data under PIPL."
+          },
+          {
+            "id": "china-25",
+            "question": "What is 'Standard Contractual Clauses' (SCC) in China?",
+            "answer": "The legal templates provided by the CAC for transferring SAP data out of China."
+          }
+        ]
       },
       {
-        "id": 3,
-        "question": "What is the 'V-Model' in the context of SAP CSV?",
-        "answer": "A SDLC framework that maps requirements (User Requirements, Functional Specs) directly to their corresponding testing phases (IQ, OQ, PQ)."
+        "key": "cloud",
+        "label": "Cloud (PCE)",
+        "category": "SAP S/4HANA Cloud (PCE)",
+        "cards": [
+          {
+            "id": "cloud-1",
+            "question": "How does CSV change for S/4HANA PCE compared to On-Premise?",
+            "answer": "Responsibility shifts from infrastructure management to vendor assessment and managed service oversight."
+          },
+          {
+            "id": "cloud-2",
+            "question": "What is the impact of SAP's 2-year release cycle on PCE validation?",
+            "answer": "It requires a 'Continuous Validation' strategy to handle frequent updates without disrupting GxP status."
+          },
+          {
+            "id": "cloud-3",
+            "question": "What is the 'Shared Responsibility Model' in PCE CSV?",
+            "answer": "SAP manages the cloud infrastructure (Qualified), while the customer manages the application and data (Validated)."
+          },
+          {
+            "id": "cloud-4",
+            "question": "How does 'Automated Regression Testing' support PCE CSV?",
+            "answer": "It allows for rapid verification of GxP processes whenever SAP applies patches or upgrades."
+          },
+          {
+            "id": "cloud-5",
+            "question": "What is a 'Validation Platform' in the PCE model?",
+            "answer": "Using tools like SAP Cloud ALM to manage validation documents and testing in a digital, integrated environment."
+          },
+          {
+            "id": "cloud-6",
+            "question": "What is the customer's role in PCE Infrastructure Qualification?",
+            "answer": "Reviewing and approving the SOC 1/SOC 2 reports and SAP's own internal validation evidence."
+          },
+          {
+            "id": "cloud-7",
+            "question": "Does PCE allow for ABAP customization in CSV projects?",
+            "answer": "Yes, but custom code (GAMP Cat 5) requires significantly more validation effort than standard configuration."
+          },
+          {
+            "id": "cloud-8",
+            "question": "How are SAP PCE 'Managed Services' validated?",
+            "answer": "Through a Service Level Agreement (SLA) and a clear definition of the vendor’s GxP-relevant operational procedures."
+          },
+          {
+            "id": "cloud-9",
+            "question": "What is 'Cloud Compliance' documentation for PCE?",
+            "answer": "Standard packages provided by SAP to help customers accelerate their validation effort for the PCE environment."
+          },
+          {
+            "id": "cloud-10",
+            "question": "What is the risk of 'Force-Upgrades' in PCE?",
+            "answer": "Upgrades are mandatory within a certain window; validation must be planned and executed within that fixed timeframe."
+          },
+          {
+            "id": "cloud-11",
+            "question": "How does BTP (Business Technology Platform) impact PCE validation?",
+            "answer": "Extensions on BTP are 'outside' the core SAP; their integration and data flow must be separately validated."
+          },
+          {
+            "id": "cloud-12",
+            "question": "What is 'Configuration as Code' in cloud CSV?",
+            "answer": "Treating SAP configurations as auditable data points that can be moved across environments via controlled transports."
+          },
+          {
+            "id": "cloud-13",
+            "question": "Why is 'Identity Management' (IAM) more critical in PCE?",
+            "answer": "Because the system is accessed over the internet, requiring validated controls for multi-factor authentication and user provisioning."
+          },
+          {
+            "id": "cloud-14",
+            "question": "What is the role of the 'Qualified Infrastructure' in PCE?",
+            "answer": "It is the foundation (provided by SAP) upon which the customer's validated SAP application sits."
+          },
+          {
+            "id": "cloud-15",
+            "question": "Does SAP PCE use the V-Model?",
+            "answer": "Yes, but it is often adapted into an 'Agile' V-Model to fit the cloud delivery speed."
+          },
+          {
+            "id": "cloud-16",
+            "question": "What is 'OQ by SAP'?",
+            "answer": "SAP performs basic functional testing of the standard software, but the customer still must validate their specific configuration."
+          },
+          {
+            "id": "cloud-17",
+            "question": "How does 'Sandbox' environment use differ in PCE CSV?",
+            "answer": "It is used for the 'Risk Assessment' phase to see how standard SAP features handle GxP requirements before formal build."
+          },
+          {
+            "id": "cloud-18",
+            "question": "What is a 'Validation Assessment' for PCE notes?",
+            "answer": "Evaluating every SAP Note or Hotfix to see if it touches a GxP-critical part of the system."
+          },
+          {
+            "id": "cloud-19",
+            "question": "What is the 'One-System' fallacy in cloud?",
+            "answer": "The mistake of thinking cloud validation is just 'signing off' what the vendor gives you; business processes remain the customer's responsibility."
+          },
+          {
+            "id": "cloud-20",
+            "question": "What is 'Electronic Document Management' (EDMS) for PCE?",
+            "answer": "A validated tool to house all cloud validation evidence (VP, URS, TM, VSR)."
+          },
+          {
+            "id": "cloud-21",
+            "question": "How are cloud 'Integrations' (e.g., via APIs) validated?",
+            "answer": "By testing the data integrity and security of the connection point between PCE and other systems."
+          },
+          {
+            "id": "cloud-22",
+            "question": "What is 'SaaS validation' vs 'PCE validation'?",
+            "answer": "PCE offers more control than SaaS, allowing for more detailed custom validation."
+          },
+          {
+            "id": "cloud-23",
+            "question": "What is 'Release Management' in a validated PCE setup?",
+            "answer": "The controlled process of moving validated configurations from Dev to Test to Production."
+          },
+          {
+            "id": "cloud-24",
+            "question": "What is 'Tenant Separation' in PCE CSV?",
+            "answer": "Verifying that the customer's GxP data is logically isolated from other customers in the SAP cloud."
+          },
+          {
+            "id": "cloud-25",
+            "question": "What is 'User Acceptance Testing' (UAT) in PCE?",
+            "answer": "The final stage where business users confirm the cloud system supports their GxP processes in the real world."
+          }
+        ]
       },
       {
-        "id": 4,
-        "question": "What does GAMP 5 stand for, and why is it important?",
-        "answer": "Good Automated Manufacturing Practice (Version 5); it is the industry-standard risk-based approach for compliant GxP computerized systems."
-      },
-      {
-        "id": 5,
-        "question": "How does CSV impact the SAP Blueprinting phase?",
-        "answer": "It requires the early definition of User Requirements (URS) and a Risk Assessment to determine which SAP processes are GxP-relevant."
-      },
-      {
-        "id": 6,
-        "question": "What are the common pitfalls in SAP CSV projects?",
-        "answer": "Underestimating documentation effort, lack of early QA involvement, and failing to define clear system boundaries."
-      },
-      {
-        "id": 7,
-        "question": "What is an Installation Qualification (IQ)?",
-        "answer": "Evidence that the SAP software and hardware infrastructure are installed correctly according to specifications."
-      },
-      {
-        "id": 8,
-        "question": "What is an Operational Qualification (OQ)?",
-        "answer": "Functional testing to verify that the SAP system operates as intended across all operational ranges."
-      },
-      {
-        "id": 9,
-        "question": "What is a Performance Qualification (PQ)?",
-        "answer": "Testing the integrated SAP system under real-world conditions to ensure it consistently meets performance criteria."
-      },
-      {
-        "id": 10,
-        "question": "Why is 'Electronic Signature' (21 CFR Part 11) critical in SAP CSV?",
-        "answer": "It ensures that digital approvals in SAP are as legally binding and traceable as handwritten signatures."
-      },
-      {
-        "id": 11,
-        "question": "What is the purpose of a Traceability Matrix (TM)?",
-        "answer": "To link each requirement (URS) to its functional design (FS), technical build, and final test case (OQ/PQ) for audit readiness."
-      },
-      {
-        "id": 12,
-        "question": "How does 'Data Integrity' apply to SAP CSV?",
-        "answer": "It follows the ALCOA+ principles (Attributable, Legible, Contemporaneous, Original, Accurate) to ensure data is trustworthy throughout its lifecycle."
-      },
-      {
-        "id": 13,
-        "question": "What is a 'Validation Summary Report' (VSR)?",
-        "answer": "The final document that summarizes the validation activities and confirms the system is 'Live' and compliant."
-      },
-      {
-        "id": 14,
-        "question": "What is the 'intended use' principle?",
-        "answer": "The core of CSV; validation is not about the software's features, but whether it works for the specific business process it was designed for."
-      },
-      {
-        "id": 15,
-        "question": "How does Change Management intersect with CSV?",
-        "answer": "Any post-go-live change to a validated SAP system must undergo a formal impact assessment and re-validation if GxP-relevant."
-      },
-      {
-        "id": 16,
-        "question": "What is Category 4 vs Category 5 in GAMP 5?",
-        "answer": "Category 4 is configured software (standard SAP), while Category 5 is custom-coded software (ABAP developments)."
-      },
-      {
-        "id": 17,
-        "question": "What is a Functional Risk Assessment (FRA)?",
-        "answer": "A step to identify which specific SAP functions carry high risk to patient safety or product quality."
-      },
-      {
-        "id": 18,
-        "question": "Who is responsible for the final 'release' of a validated system?",
-        "answer": "The Quality Unit (QA) and the System Owner."
-      },
-      {
-        "id": 19,
-        "question": "What are peripheral systems in SAP CSV?",
-        "answer": "External systems (LIMS, MES, WMS) that exchange GxP data with SAP and require interface validation."
-      },
-      {
-        "id": 20,
-        "question": "Define 'Legacy System Migration' in CSV.",
-        "answer": "The process of moving GxP data from an old system to SAP while maintaining data integrity and audit trails."
-      },
-      {
-        "id": 21,
-        "question": "What is 'Retrospective Validation'?",
-        "answer": "Validating an existing system that is already in use but lacks full documentation (rarely recommended today)."
-      },
-      {
-        "id": 22,
-        "question": "What is a Validation Plan (VP)?",
-        "answer": "The roadmap defining the scope, responsibilities, and acceptance criteria for the entire SAP validation project."
-      },
-      {
-        "id": 23,
-        "question": "What is a 'Critical Process Parameter' (CPP)?",
-        "answer": "A parameter in SAP (like a temperature setpoint) that must be monitored and validated as it impacts product quality."
-      },
-      {
-        "id": 24,
-        "question": "What is 'Vendor Audit' in the context of CSV?",
-        "answer": "Assessing SAP or a hosting provider to ensure their software development and quality management systems are GxP-compliant."
-      },
-      {
-        "id": 25,
-        "question": "What is 'Audit Trail Review'?",
-        "answer": "A periodic check of SAP logs to ensure users are not bypassing GxP controls."
+        "key": "architecture",
+        "label": "Architecture",
+        "category": "Architecture & Toolset",
+        "cards": [
+          {
+            "id": "architecture-1",
+            "question": "Which SAP modules typically fall under GMP (Manufacturing)?",
+            "answer": "PP/PP-PI, QM, MM, EWM/WM, Batch Management, and ATTP (Serialization)."
+          },
+          {
+            "id": "architecture-2",
+            "question": "Which SAP modules are primarily governed by GDP (Distribution)?",
+            "answer": "SD (Sales and Distribution), LE-TRA (Transportation), and Serialization components."
+          },
+          {
+            "id": "architecture-3",
+            "question": "How does GLP (Laboratory) manifest in SAP?",
+            "answer": "Through integration between the QM module and external LIMS (Lab Systems)."
+          },
+          {
+            "id": "architecture-4",
+            "question": "What is the regulatory status of EU Annex 11 vs FDA Part 11?",
+            "answer": "Part 11 is binding US law; Annex 11 is EU guidance (though enforced as a standard)."
+          },
+          {
+            "id": "architecture-5",
+            "question": "What is a GAMP Category 3 system?",
+            "answer": "Non-configured products (COTS) used 'as is' without business-specific configuration."
+          },
+          {
+            "id": "architecture-6",
+            "question": "What is the focus of 'Interface Validation'?",
+            "answer": "Proving data integrity and mapping accuracy during hand-offs between systems."
+          },
+          {
+            "id": "architecture-7",
+            "question": "How does Cloud ALM centralize validation deliverables?",
+            "answer": "It links URS, Functional Specs, Test Cases, and the RTM in one digital environment."
+          },
+          {
+            "id": "architecture-8",
+            "question": "Define the 'Federated Validation' pattern.",
+            "answer": "Maintaining a global validation backbone while adding local annexes for specific regions."
+          },
+          {
+            "id": "architecture-9",
+            "question": "Name two leading 'Paperless Validation' platforms.",
+            "answer": "Kneat Gx and ValGenesis VLMS."
+          },
+          {
+            "id": "architecture-10",
+            "question": "What tool identifies affected GxP objects during a patch?",
+            "answer": "LiveCompare or Panaya (Change-Impact Analysis tools)."
+          },
+          {
+            "id": "architecture-11",
+            "question": "Define the 'Bluefield' migration path.",
+            "answer": "A selective data transition moving chosen processes to S/4HANA, balancing Greenfield and Brownfield."
+          },
+          {
+            "id": "architecture-12",
+            "question": "What is the 'Clean Core' benefit for CSV?",
+            "answer": "Reduces Cat 5 custom code footprint, simplifying the validation of future upgrades."
+          },
+          {
+            "id": "architecture-13",
+            "question": "What does 'Enduring' mean in ALCOA+?",
+            "answer": "Ensuring records are readable and exist for the entire required retention period."
+          },
+          {
+            "id": "architecture-14",
+            "question": "What is the NMPA Annex scope for computerized systems?",
+            "answer": "Broad scope: R&D, Clinical Trials, Manufacturing, and Post-Market."
+          },
+          {
+            "id": "architecture-15",
+            "question": "What is the 'GTI' validation requirement?",
+            "answer": "Proving accurate export of billing data to the state tax system for legal compliance."
+          },
+          {
+            "id": "architecture-16",
+            "question": "What is required for MLPS Level 3 certification?",
+            "answer": "Self-assessment plus mandatory annual audits by a certified third-party agency."
+          },
+          {
+            "id": "architecture-17",
+            "question": "How does expert expertise apply in CSA 'Unscripted Testing'?",
+            "answer": "Testers explore the system to find bugs rather than following a rigid pass/fail script."
+          },
+          {
+            "id": "architecture-18",
+            "question": "What are 'Delta Requirements'?",
+            "answer": "Business needs not met by SAP Best Practice, requiring custom configuration/code."
+          },
+          {
+            "id": "architecture-19",
+            "question": "What does the PCE 'QRS' grant the customer?",
+            "answer": "Legal audit rights over SAP's cloud infrastructure and QMS documentation."
+          },
+          {
+            "id": "architecture-20",
+            "question": "What is 'Continuous Validation'?",
+            "answer": "Using automated regression to keep the system validated through cloud updates."
+          },
+          {
+            "id": "architecture-21",
+            "question": "Why is 'Traceability' the heart of CSV?",
+            "answer": "It proves every regulatory requirement was designed, built, and successfully tested."
+          },
+          {
+            "id": "architecture-22",
+            "question": "What is the role of the 'Process Owner'?",
+            "answer": "The individual responsible for the business process and its 'Intended Use' compliance."
+          },
+          {
+            "id": "architecture-23",
+            "question": "How does China's DSL classify data?",
+            "answer": "Categorizes data based on national security impact to determine protection levels."
+          },
+          {
+            "id": "architecture-24",
+            "question": "What is 'Data Residency' under PIPL?",
+            "answer": "Storing personal and important data on servers physically located inside China."
+          },
+          {
+            "id": "architecture-25",
+            "question": "What is the 'V-Model'?",
+            "answer": "Lifecycle model mapping requirement phases (URS/FS) to testing phases (PQ/OQ)."
+          }
+        ]
       }
-    ]
-  },
-  {
-    "key": "china",
-    "label": "China",
-    "category": "China Compliance in GxP & CSV",
-    "cards": [
-      {
-        "id": 26,
-        "question": "What is MLPS 2.0 and its relevance to SAP in China?",
-        "answer": "The Multi-Level Protection Scheme; SAP systems in China must be graded and certified (usually Level 3) for cybersecurity."
-      },
-      {
-        "id": 27,
-        "question": "How does PIPL affect SAP user data?",
-        "answer": "Personal Information Protection Law; requires explicit consent and strict controls for any PII stored in or transferred from SAP China."
-      },
-      {
-        "id": 28,
-        "question": "What is the 'Golden Tax' integration requirement?",
-        "answer": "SAP China must integrate with the government's tax system for fapiao (invoice) issuance and validation."
-      },
-      {
-        "id": 29,
-        "question": "What is the NMPA's stance on SAP CSV?",
-        "answer": "The National Medical Products Administration (China's FDA) requires strict CSV for any SAP system used in drug or device manufacturing."
-      },
-      {
-        "id": 30,
-        "question": "What is 'Data Localization' for SAP China?",
-        "answer": "Critical business and personal data generated in China must be stored on servers physically located within China."
-      },
-      {
-        "id": 31,
-        "question": "Define 'Cross-Border Data Transfer' (CBDT) in SAP.",
-        "answer": "The legal process of moving data from SAP China to a global HQ, requiring a security assessment by the CAC."
-      },
-      {
-        "id": 32,
-        "question": "What is the CAC?",
-        "answer": "Cyberspace Administration of China; the primary regulator for data security and PIPL compliance."
-      },
-      {
-        "id": 33,
-        "question": "How does the 'Data Security Law' (DSL) impact SAP projects?",
-        "answer": "It categorizes data and mandates protections based on the impact on national security."
-      },
-      {
-        "id": 34,
-        "question": "What is 'MLPS Filing'?",
-        "answer": "The formal process of submitting SAP system security designs to the local Public Security Bureau for approval."
-      },
-      {
-        "id": 35,
-        "question": "What is an 'Appointed Third-Party' audit in China CSV?",
-        "answer": "Engaging a China-certified agency to audit the SAP system’s cybersecurity (MLPS) compliance."
-      },
-      {
-        "id": 36,
-        "question": "Does SAP China require a 'GB' (Guobiao) standard check?",
-        "answer": "Yes, technical validation often includes checking against specific 'GB' national standards for encryption and security."
-      },
-      {
-        "id": 37,
-        "question": "How are 'Fapiao' audits conducted in a validated SAP environment?",
-        "answer": "Validation must prove that the SAP-to-Golden-Tax interface is accurate and tamper-proof."
-      },
-      {
-        "id": 38,
-        "question": "What is 'Sensitive Personal Information' under PIPL?",
-        "answer": "Biometric data, medical history, or financial info in SAP that requires even higher levels of protection and consent."
-      },
-      {
-        "id": 39,
-        "question": "What is 'De-identification' in SAP China reporting?",
-        "answer": "Removing PII from SAP data before sending it to global dashboards to comply with localization laws."
-      },
-      {
-        "id": 40,
-        "question": "What is the 'Cryptographic Law' of China?",
-        "answer": "Requires that SAP systems use government-approved encryption algorithms for data storage and transmission."
-      },
-      {
-        "id": 41,
-        "question": "What is a 'Data Protection Impact Assessment' (DPIA)?",
-        "answer": "A mandatory PIPL step to assess risks before processing sensitive data in SAP."
-      },
-      {
-        "id": 42,
-        "question": "How does 'NMPA Annex 1' apply to SAP?",
-        "answer": "It provides specific guidelines for computerized systems used in pharmaceutical manufacturing."
-      },
-      {
-        "id": 43,
-        "question": "What is the 'Cybersecurity Review' for SAP PCE in China?",
-        "answer": "A review required if an SAP project involves purchasing critical network products that could affect national security."
-      },
-      {
-        "id": 44,
-        "question": "What is 'Localization Validation'?",
-        "answer": "Validating the specific SAP China Add-on or local patches that are not part of the global core."
-      },
-      {
-        "id": 45,
-        "question": "What is 'Joint and Several Liability' in PIPL?",
-        "answer": "Both the customer and SAP (if it is a service provider) can be held liable for data breaches in the cloud."
-      },
-      {
-        "id": 46,
-        "question": "What is 'Self-Assessment' for data export?",
-        "answer": "The internal review a company must do before asking the government for permission to export SAP data."
-      },
-      {
-        "id": 47,
-        "question": "How is 'Audit Trail' compliance checked by NMPA?",
-        "answer": "Inspectors look for un-editable logs of every data entry, modification, and deletion in SAP."
-      },
-      {
-        "id": 48,
-        "question": "What is 'Network Security Domain' in MLPS?",
-        "answer": "Structuring the SAP network into zones (Production, DMZ) with validated firewalls between them."
-      },
-      {
-        "id": 49,
-        "question": "What is the 'Designated Data Handler'?",
-        "answer": "The specific entity in China legally responsible for the SAP data under PIPL."
-      },
-      {
-        "id": 50,
-        "question": "What is 'Standard Contractual Clauses' (SCC) in China?",
-        "answer": "The legal templates provided by the CAC for transferring SAP data out of China."
-      }
-    ]
-  },
-  {
-    "key": "cloud",
-    "label": "SAP",
-    "category": "SAP S/4HANA Cloud (PCE)",
-    "cards": [
-      {
-        "id": 51,
-        "question": "How does CSV change for S/4HANA PCE compared to On-Premise?",
-        "answer": "Responsibility shifts from infrastructure management to vendor assessment and managed service oversight."
-      },
-      {
-        "id": 52,
-        "question": "What is the impact of SAP's 2-year release cycle on PCE validation?",
-        "answer": "It requires a 'Continuous Validation' strategy to handle frequent updates without disrupting GxP status."
-      },
-      {
-        "id": 53,
-        "question": "What is the 'Shared Responsibility Model' in PCE CSV?",
-        "answer": "SAP manages the cloud infrastructure (Qualified), while the customer manages the application and data (Validated)."
-      },
-      {
-        "id": 54,
-        "question": "How does 'Automated Regression Testing' support PCE CSV?",
-        "answer": "It allows for rapid verification of GxP processes whenever SAP applies patches or upgrades."
-      },
-      {
-        "id": 55,
-        "question": "What is a 'Validation Platform' in the PCE model?",
-        "answer": "Using tools like SAP Cloud ALM to manage validation documents and testing in a digital, integrated environment."
-      },
-      {
-        "id": 56,
-        "question": "What is the customer's role in PCE Infrastructure Qualification?",
-        "answer": "Reviewing and approving the SOC 1/SOC 2 reports and SAP's own internal validation evidence."
-      },
-      {
-        "id": 57,
-        "question": "Does PCE allow for ABAP customization in CSV projects?",
-        "answer": "Yes, but custom code (GAMP Cat 5) requires significantly more validation effort than standard configuration."
-      },
-      {
-        "id": 58,
-        "question": "How are SAP PCE 'Managed Services' validated?",
-        "answer": "Through a Service Level Agreement (SLA) and a clear definition of the vendor’s GxP-relevant operational procedures."
-      },
-      {
-        "id": 59,
-        "question": "What is 'Cloud Compliance' documentation for PCE?",
-        "answer": "Standard packages provided by SAP to help customers accelerate their validation effort for the PCE environment."
-      },
-      {
-        "id": 60,
-        "question": "What is the risk of 'Force-Upgrades' in PCE?",
-        "answer": "Upgrades are mandatory within a certain window; validation must be planned and executed within that fixed timeframe."
-      },
-      {
-        "id": 61,
-        "question": "How does BTP (Business Technology Platform) impact PCE validation?",
-        "answer": "Extensions on BTP are 'outside' the core SAP; their integration and data flow must be separately validated."
-      },
-      {
-        "id": 62,
-        "question": "What is 'Configuration as Code' in cloud CSV?",
-        "answer": "Treating SAP configurations as auditable data points that can be moved across environments via controlled transports."
-      },
-      {
-        "id": 63,
-        "question": "Why is 'Identity Management' (IAM) more critical in PCE?",
-        "answer": "Because the system is accessed over the internet, requiring validated controls for multi-factor authentication and user provisioning."
-      },
-      {
-        "id": 64,
-        "question": "What is the role of the 'Qualified Infrastructure' in PCE?",
-        "answer": "It is the foundation (provided by SAP) upon which the customer's validated SAP application sits."
-      },
-      {
-        "id": 65,
-        "question": "Does SAP PCE use the V-Model?",
-        "answer": "Yes, but it is often adapted into an 'Agile' V-Model to fit the cloud delivery speed."
-      },
-      {
-        "id": 66,
-        "question": "What is 'OQ by SAP'?",
-        "answer": "SAP performs basic functional testing of the standard software, but the customer still must validate their specific configuration."
-      },
-      {
-        "id": 67,
-        "question": "How does 'Sandbox' environment use differ in PCE CSV?",
-        "answer": "It is used for the 'Risk Assessment' phase to see how standard SAP features handle GxP requirements before formal build."
-      },
-      {
-        "id": 68,
-        "question": "What is a 'Validation Assessment' for PCE notes?",
-        "answer": "Evaluating every SAP Note or Hotfix to see if it touches a GxP-critical part of the system."
-      },
-      {
-        "id": 69,
-        "question": "What is the 'One-System' fallacy in cloud?",
-        "answer": "The mistake of thinking cloud validation is just 'signing off' what the vendor gives you; business processes remain the customer's responsibility."
-      },
-      {
-        "id": 70,
-        "question": "What is 'Electronic Document Management' (EDMS) for PCE?",
-        "answer": "A validated tool to house all cloud validation evidence (VP, URS, TM, VSR)."
-      },
-      {
-        "id": 71,
-        "question": "How are cloud 'Integrations' (e.g., via APIs) validated?",
-        "answer": "By testing the data integrity and security of the connection point between PCE and other systems."
-      },
-      {
-        "id": 72,
-        "question": "What is 'SaaS validation' vs 'PCE validation'?",
-        "answer": "PCE offers more control than SaaS, allowing for more detailed custom validation."
-      },
-      {
-        "id": 73,
-        "question": "What is 'Release Management' in a validated PCE setup?",
-        "answer": "The controlled process of moving validated configurations from Dev to Test to Production."
-      },
-      {
-        "id": 74,
-        "question": "What is 'Tenant Separation' in PCE CSV?",
-        "answer": "Verifying that the customer's GxP data is logically isolated from other customers in the SAP cloud."
-      },
-      {
-        "id": 75,
-        "question": "What is 'User Acceptance Testing' (UAT) in PCE?",
-        "answer": "The final stage where business users confirm the cloud system supports their GxP processes in the real world."
-      }
-    ]
-  },
-  {
-    "key": "architecture",
-    "label": "Architecture",
-    "category": "Architecture & Toolset",
-    "cards": [
-      {
-        "id": 76,
-        "question": "Which SAP modules typically fall under GMP (Manufacturing)?",
-        "answer": "PP/PP-PI, QM, MM, EWM/WM, Batch Management, and ATTP (Serialization)."
-      },
-      {
-        "id": 77,
-        "question": "Which SAP modules are primarily governed by GDP (Distribution)?",
-        "answer": "SD (Sales and Distribution), LE-TRA (Transportation), and Serialization components."
-      },
-      {
-        "id": 78,
-        "question": "How does GLP (Laboratory) manifest in SAP?",
-        "answer": "Through integration between the QM module and external LIMS (Lab Systems)."
-      },
-      {
-        "id": 79,
-        "question": "What is the regulatory status of EU Annex 11 vs FDA Part 11?",
-        "answer": "Part 11 is binding US law; Annex 11 is EU guidance (though enforced as a standard)."
-      },
-      {
-        "id": 80,
-        "question": "What is a GAMP Category 3 system?",
-        "answer": "Non-configured products (COTS) used 'as is' without business-specific configuration."
-      },
-      {
-        "id": 81,
-        "question": "What is the focus of 'Interface Validation'?",
-        "answer": "Proving data integrity and mapping accuracy during hand-offs between systems."
-      },
-      {
-        "id": 82,
-        "question": "How does Cloud ALM centralize validation deliverables?",
-        "answer": "It links URS, Functional Specs, Test Cases, and the RTM in one digital environment."
-      },
-      {
-        "id": 83,
-        "question": "Define the 'Federated Validation' pattern.",
-        "answer": "Maintaining a global validation backbone while adding local annexes for specific regions."
-      },
-      {
-        "id": 84,
-        "question": "Name two leading 'Paperless Validation' platforms.",
-        "answer": "Kneat Gx and ValGenesis VLMS."
-      },
-      {
-        "id": 85,
-        "question": "What tool identifies affected GxP objects during a patch?",
-        "answer": "LiveCompare or Panaya (Change-Impact Analysis tools)."
-      },
-      {
-        "id": 86,
-        "question": "Define the 'Bluefield' migration path.",
-        "answer": "A selective data transition moving chosen processes to S/4HANA, balancing Greenfield and Brownfield."
-      },
-      {
-        "id": 87,
-        "question": "What is the 'Clean Core' benefit for CSV?",
-        "answer": "Reduces Cat 5 custom code footprint, simplifying the validation of future upgrades."
-      },
-      {
-        "id": 88,
-        "question": "What does 'Enduring' mean in ALCOA+?",
-        "answer": "Ensuring records are readable and exist for the entire required retention period."
-      },
-      {
-        "id": 89,
-        "question": "What is the NMPA Annex scope for computerized systems?",
-        "answer": "Broad scope: R&D, Clinical Trials, Manufacturing, and Post-Market."
-      },
-      {
-        "id": 90,
-        "question": "What is the 'GTI' validation requirement?",
-        "answer": "Proving accurate export of billing data to the state tax system for legal compliance."
-      },
-      {
-        "id": 91,
-        "question": "What is required for MLPS Level 3 certification?",
-        "answer": "Self-assessment plus mandatory annual audits by a certified third-party agency."
-      },
-      {
-        "id": 92,
-        "question": "How does expert expertise apply in CSA 'Unscripted Testing'?",
-        "answer": "Testers explore the system to find bugs rather than following a rigid pass/fail script."
-      },
-      {
-        "id": 93,
-        "question": "What are 'Delta Requirements'?",
-        "answer": "Business needs not met by SAP Best Practice, requiring custom configuration/code."
-      },
-      {
-        "id": 94,
-        "question": "What does the PCE 'QRS' grant the customer?",
-        "answer": "Legal audit rights over SAP's cloud infrastructure and QMS documentation."
-      },
-      {
-        "id": 95,
-        "question": "What is 'Continuous Validation'?",
-        "answer": "Using automated regression to keep the system validated through cloud updates."
-      },
-      {
-        "id": 96,
-        "question": "Why is 'Traceability' the heart of CSV?",
-        "answer": "It proves every regulatory requirement was designed, built, and successfully tested."
-      },
-      {
-        "id": 97,
-        "question": "What is the role of the 'Process Owner'?",
-        "answer": "The individual responsible for the business process and its 'Intended Use' compliance."
-      },
-      {
-        "id": 98,
-        "question": "How does China's DSL classify data?",
-        "answer": "Categorizes data based on national security impact to determine protection levels."
-      },
-      {
-        "id": 99,
-        "question": "What is 'Data Residency' under PIPL?",
-        "answer": "Storing personal and important data on servers physically located inside China."
-      },
-      {
-        "id": 100,
-        "question": "What is the 'V-Model'?",
-        "answer": "Lifecycle model mapping requirement phases (URS/FS) to testing phases (PQ/OQ)."
+    ],
+    "zh": [
+      {
+        "key": "global",
+        "label": "全球GxP/CSV",
+        "category": "全球 SAP GxP & CSV",
+        "cards": [
+          {
+            "id": "global-1",
+            "question": "SAP 项目中计算机系统验证 (CSV) 的主要目标是什么？",
+            "answer": "提供文件证据，证明 SAP 系统始终如一地根据其预期用途运行，并符合 GxP 监管要求。"
+          },
+          {
+            "id": "global-2",
+            "question": "请解释 CSV 与 GxP 之间的关系。",
+            "answer": "CSV 是用于确保计算机化系统（如 SAP）符合 GxP（良好实践）法规的过程，例如 GMP、GDP 和 GCP。"
+          },
+          {
+            "id": "global-3",
+            "question": "在 SAP CSV 的背景下，什么是“V-Model”？",
+            "answer": "一种 SDLC 框架，将需求（URS、Functional Specs）直接映射到其对应的测试阶段（IQ、OQ、PQ）。"
+          },
+          {
+            "id": "global-4",
+            "question": "GAMP 5 代表什么，为什么它很重要？",
+            "answer": "良好自动化制造规范（第 5 版）；它是合规 GxP 计算机化系统的行业标准风险导向方法。"
+          },
+          {
+            "id": "global-5",
+            "question": "CSV 如何影响 SAP Blueprinting 阶段？",
+            "answer": "它要求尽早定义 URS 和进行风险评估，以确定哪些 SAP 流程具有 GxP 相关性。"
+          },
+          {
+            "id": "global-6",
+            "question": "SAP CSV 项目中常见的坑有哪些？",
+            "answer": "低估文档工作量、缺乏 QA 的早期参与以及未能定义清晰的系统边界。"
+          },
+          {
+            "id": "global-7",
+            "question": "什么是安装确认 (IQ)？",
+            "answer": "证明 SAP 软件和硬件基础设施已根据规范正确安装的证据。"
+          },
+          {
+            "id": "global-8",
+            "question": "什么是运行确认 (OQ)？",
+            "answer": "功能测试，用于验证 SAP 系统在所有运行范围内是否按预期运行。"
+          },
+          {
+            "id": "global-9",
+            "question": "什么是性能确认 (PQ)？",
+            "answer": "在真实条件下测试集成后的 SAP 系统，以确保其始终如一地满足性能标准。"
+          },
+          {
+            "id": "global-10",
+            "question": "为什么“电子签名”(21 CFR Part 11) 在 SAP CSV 中至关重要？",
+            "answer": "它确保 SAP 中的数字批准与手写签名一样具有法律约束力和可追溯性。"
+          },
+          {
+            "id": "global-11",
+            "question": "跟踪矩阵 (TM) 的目的是什么？",
+            "answer": "将每个需求 (URS) 与其功能设计 (FS)、技术构建和最终测试用例 (OQ/PQ) 相关联，以备审计。"
+          },
+          {
+            "id": "global-12",
+            "question": "“数据完整性”如何应用于 SAP CSV？",
+            "answer": "它遵循 ALCOA+ 原则（可追溯性、清晰性、同步性、原始性、准确性等），确保数据在整个生命周期内是可信的。"
+          },
+          {
+            "id": "global-13",
+            "question": "什么是“验证总结报告” (VSR)？",
+            "answer": "汇总验证活动并确认系统已上线并合规的最终文档。"
+          },
+          {
+            "id": "global-14",
+            "question": "什么是“预期用途”原则？",
+            "answer": "CSV 的核心；验证不是关于软件的功能，而是关于它是否适用于其设计的特定业务流程。"
+          },
+          {
+            "id": "global-15",
+            "question": "变更管理如何与 CSV 交叉？",
+            "answer": "对已验证的 SAP 系统进行的任何上线后变更都必须经过正式的影响评估，如果涉及 GxP，则需要重新验证。"
+          },
+          {
+            "id": "global-16",
+            "question": "GAMP 5 中的 Category 4 与 Category 5 有什么区别？",
+            "answer": "Category 4 是配置类软件（标准 SAP），而 Category 5 是定制开发类软件（ABAP 开发）。"
+          },
+          {
+            "id": "global-17",
+            "question": "什么是功能风险评估 (FRA)？",
+            "answer": "识别哪些特定的 SAP 功能对患者安全或产品质量具有高风险的步骤。"
+          },
+          {
+            "id": "global-18",
+            "question": "谁负责已验证系统的最终“发布”？",
+            "answer": "质量部门 (QA) 和系统所有者 (System Owner)。"
+          },
+          {
+            "id": "global-19",
+            "question": "SAP CSV 中的外围系统是什么？",
+            "answer": "与 SAP 交换 GxP 数据并需要接口验证的外部系统（如 LIMS、MES、WMS）。"
+          },
+          {
+            "id": "global-20",
+            "question": "定义 CSV 中的“遗留系统迁移”。",
+            "answer": "将 GxP 数据从旧系统迁移到 SAP，同时保持数据完整性和审计追踪的过程。"
+          },
+          {
+            "id": "global-21",
+            "question": "什么是“回顾性验证”？",
+            "answer": "验证一个已经在使用的但缺乏完整文档的现有系统（现在很少推荐）。"
+          },
+          {
+            "id": "global-22",
+            "question": "什么是验证计划 (VP)？",
+            "answer": "定义整个 SAP 验证项目的范围、职责和验收标准的路线图。"
+          },
+          {
+            "id": "global-23",
+            "question": "什么是“关键工艺参数” (CPP)？",
+            "answer": "SAP 中必须监控和验证的参数（如温度设定点），因为它会影响产品质量。"
+          },
+          {
+            "id": "global-24",
+            "question": "CSV 背景下的“供应商审计”是什么？",
+            "answer": "评估 SAP 或托管提供商，以确保其软件开发和质量管理体系符合 GxP 要求。"
+          },
+          {
+            "id": "global-25",
+            "question": "什么是“审计追踪审阅”？",
+            "answer": "对 SAP 日志进行定期检查，以确保用户没有绕过 GxP 控制。"
+          }
+        ]
+      },
+      {
+        "key": "china",
+        "label": "中国GxP/CSV",
+        "category": "中国 GxP & CSV 合规",
+        "cards": [
+          {
+            "id": "china-1",
+            "question": "什么是 MLPS 2.0 及其与中国 SAP 的相关性？",
+            "answer": "等级保护 2.0 系统；中国的 SAP 系统必须进行定级并获得网络安全认证（通常为三级）。"
+          },
+          {
+            "id": "china-2",
+            "question": "PIPL 如何影响 SAP 用户数据？",
+            "answer": "《个人信息保护法》；对于在 SAP China 中存储或从中传输的任何 PII，需要明确同意和严格控制。"
+          },
+          {
+            "id": "china-3",
+            "question": "什么是“金税”集成要求？",
+            "answer": "SAP China 必须与政府的税务系统集成，用于“发票”(fapiao) 的开具和验证。"
+          },
+          {
+            "id": "china-4",
+            "question": "NMPA 对 SAP CSV 的立场是什么？",
+            "answer": "国家药品监督管理局（中国 FDA）要求对用于药品或医疗器械制造的任何 SAP 系统进行严格的 CSV。"
+          },
+          {
+            "id": "china-5",
+            "question": "什么是 SAP China 的“数据本地化”？",
+            "answer": "在中国产生的关键业务和个人数据必须存储在位于中国境内的物理服务器上。"
+          },
+          {
+            "id": "china-6",
+            "question": "定义 SAP 中的“跨境数据传输” (CBDT)。",
+            "answer": "将数据从 SAP China 转移到全球总部的法律过程，需要经过 CAC 的安全评估。"
+          },
+          {
+            "id": "china-7",
+            "question": "什么是 CAC？",
+            "answer": "国家互联网信息办公室 (Cyberspace Administration of China)；数据安全和 PIPL 合规的主要监管机构。"
+          },
+          {
+            "id": "china-8",
+            "question": "《数据安全法》(DSL) 如何影响 SAP 项目？",
+            "answer": "它对数据进行分类，并根据对国家安全的影响强制执行保护措施。"
+          },
+          {
+            "id": "china-9",
+            "question": "什么是“等保备案” (MLPS Filing)？",
+            "answer": "将 SAP 系统安全设计提交给当地公安局审批的正规过程。"
+          },
+          {
+            "id": "china-10",
+            "question": "中国 CSV 中的“指定第三方”审计是什么？",
+            "answer": "聘请中国认证的机构对 SAP 系统的网络安全（MLPS）合规性进行审计。"
+          },
+          {
+            "id": "china-11",
+            "question": "SAP China 是否需要“GB” (国标) 标准检查？",
+            "answer": "是的，技术验证通常包括对照特定的加密和安全“GB”国家标准进行检查。"
+          },
+          {
+            "id": "china-12",
+            "question": "在已验证的 SAP 环境中如何进行“发票”审计？",
+            "answer": "验证必须证明 SAP 到金税系统的接口是准确且防篡改的。"
+          },
+          {
+            "id": "china-13",
+            "question": "PIPL 下的“敏感个人信息”是什么？",
+            "answer": "SAP 中的生物识别数据、病史或财务信息，这些信息需要更高级别的保护和同意。"
+          },
+          {
+            "id": "china-14",
+            "question": "SAP China 报表中的“去标识化”是什么？",
+            "answer": "在将 SAP 数据发送到全球仪表板之前删除 PII，以符合本地化法律。"
+          },
+          {
+            "id": "china-15",
+            "question": "中国的《密码法》是什么？",
+            "answer": "要求 SAP 系统使用政府批准的加密算法进行数据存储和传输。"
+          },
+          {
+            "id": "china-16",
+            "question": "什么是“数据保护影响评估” (DPIA)？",
+            "answer": "PIPL 强制要求的步骤，用于在 SAP 中处理敏感数据之前评估风险。"
+          },
+          {
+            "id": "china-17",
+            "question": "“NMPA 附录 1”如何应用于 SAP？",
+            "answer": "它为制药生产中使用的计算机化系统提供了具体指南。"
+          },
+          {
+            "id": "china-18",
+            "question": "中国 SAP PCE 的“网络安全审查”是什么？",
+            "answer": "如果 SAP 项目涉及购买可能影响国家安全的关键网络产品，则需要进行审查。"
+          },
+          {
+            "id": "china-19",
+            "question": "什么是“本地化验证”？",
+            "answer": "验证不属于全球核心系统的特定 SAP China Add-on 或本地补丁。"
+          },
+          {
+            "id": "china-20",
+            "question": "PIPL 中的“连带责任”是什么？",
+            "answer": "如果发生数据泄露，客户和 SAP（作为服务提供商）都可能在云端承担责任。"
+          },
+          {
+            "id": "china-21",
+            "question": "数据出口的“自评估”是什么？",
+            "answer": "公司在请求政府批准导出 SAP 数据之前必须进行的内部审查。"
+          },
+          {
+            "id": "china-22",
+            "question": "NMPA 如何检查“审计追踪”合规性？",
+            "answer": "检查员会查找 SAP 中每一项数据录入、修改和删除的不可编辑日志。"
+          },
+          {
+            "id": "china-23",
+            "question": "MLPS 中的“网络安全域”是什么？",
+            "answer": "将 SAP 网络划分为不同的区域（生产区、DMZ 区），并在它们之间建立经过验证的防火墙。"
+          },
+          {
+            "id": "china-24",
+            "question": "什么是“指定数据处理者”？",
+            "answer": "在中国境内对 PIPL 下的 SAP 数据承担法律责任的特定实体。"
+          },
+          {
+            "id": "china-25",
+            "question": "中国的“标准合同条款” (SCC) 是什么？",
+            "answer": "由 CAC 提供的用于将 SAP 数据传出中国的法律模板。"
+          }
+        ]
+      },
+      {
+        "key": "cloud",
+        "label": "SAP私有云",
+        "category": "SAP S/4HANA Cloud (PCE)",
+        "cards": [
+          {
+            "id": "cloud-1",
+            "question": "与本地部署相比，S/4HANA PCE 的 CSV 有何变化？",
+            "answer": "职责从基础设施管理转向供应商评估和托管服务监督。"
+          },
+          {
+            "id": "cloud-2",
+            "question": "SAP 的 2 年发布周期对 PCE 验证有何影响？",
+            "answer": "它要求采用“持续验证”策略，以便在不破坏 GxP 状态的情况下处理频繁更新。"
+          },
+          {
+            "id": "cloud-3",
+            "question": "PCE CSV 中的“责任共担模型”是什么？",
+            "answer": "SAP 管理云基础设施（Qualified），而客户管理应用程序和数据（Validated）。"
+          },
+          {
+            "id": "cloud-4",
+            "question": "“自动化回归测试”如何支持 PCE CSV？",
+            "answer": "它允许在 SAP 应用补丁或升级时，快速验证 GxP 流程。"
+          },
+          {
+            "id": "cloud-5",
+            "question": "PCE 模型中的“验证平台”是什么？",
+            "answer": "使用 SAP Cloud ALM 等工具，在数字化的集成环境中管理验证文档和测试。"
+          },
+          {
+            "id": "cloud-6",
+            "question": "客户在 PCE 基础设施确认中的角色是什么？",
+            "answer": "审阅并批准 SOC 1/SOC 2 报告以及 SAP 自身的内部验证证据。"
+          },
+          {
+            "id": "cloud-7",
+            "question": "PCE 是否允许在 CSV 项目中进行 ABAP 定制？",
+            "answer": "允许，但自定义代码 (GAMP Cat 5) 比标准配置需要多得多的验证工作。"
+          },
+          {
+            "id": "cloud-8",
+            "question": "如何验证 SAP PCE 的“托管服务”？",
+            "answer": "通过服务水平协议 (SLA) 以及对供应商 GxP 相关操作规程的清晰定义来验证。"
+          },
+          {
+            "id": "cloud-9",
+            "question": "什么是 PCE 的“云合规”文档？",
+            "answer": "由 SAP 提供的标准包，旨在帮助客户加速 PCE 环境的验证工作。"
+          },
+          {
+            "id": "cloud-10",
+            "question": "PCE 中“强制升级”的风险是什么？",
+            "answer": "升级在特定窗口期内是强制性的；验证必须在该固定时限内计划并执行。"
+          },
+          {
+            "id": "cloud-11",
+            "question": "BTP (Business Technology Platform) 如何影响 PCE 验证？",
+            "answer": "BTP 上的扩展位于 SAP 核心“之外”；它们的集成和数据流必须单独验证。"
+          },
+          {
+            "id": "cloud-12",
+            "question": "云端 CSV 中的“配置即代码”是什么？",
+            "answer": "将 SAP 配置视为可审计的数据点，通过受控传输在不同环境之间移动。"
+          },
+          {
+            "id": "cloud-13",
+            "question": "为什么身份管理 (IAM) 在 PCE 中更重要？",
+            "answer": "因为系统是通过互联网访问的，需要针对多因素身份验证和用户配置进行经过验证的控制。"
+          },
+          {
+            "id": "cloud-14",
+            "question": "PCE 中“合格基础设施”的作用是什么？",
+            "answer": "它是 SAP 提供的基础，客户经过验证的 SAP 应用程序运行于其上。"
+          },
+          {
+            "id": "cloud-15",
+            "question": "SAP PCE 使用 V-Model 吗？",
+            "answer": "使用，但它通常被调整为“敏捷” V-Model，以适应云交付速度。"
+          },
+          {
+            "id": "cloud-16",
+            "question": "什么是“由 SAP 完成的 OQ”？",
+            "answer": "SAP 对标准软件进行基本功能测试，但客户仍必须验证其特定的配置。"
+          },
+          {
+            "id": "cloud-17",
+            "question": "在 PCE CSV 中，“Sandbox”环境的用途有何不同？",
+            "answer": "它用于“风险评估”阶段，在正式构建之前查看标准 SAP 功能如何处理 GxP 要求。"
+          },
+          {
+            "id": "cloud-18",
+            "question": "什么是针对 PCE 补丁的“验证评估”？",
+            "answer": "评估每一个 SAP Note 或热补丁，看它是否涉及系统的 GxP 关键部分。"
+          },
+          {
+            "id": "cloud-19",
+            "question": "云端的“单一系统”误区是什么？",
+            "answer": "错误地认为云验证只是“签收”供应商提供的东西；业务流程始终是客户的责任。"
+          },
+          {
+            "id": "cloud-20",
+            "question": "PCE 的“电子文档管理” (EDMS) 是什么？",
+            "answer": "一个经过验证的工具，用于存放所有云验证证据（VP、URS、TM、VSR）。"
+          },
+          {
+            "id": "cloud-21",
+            "question": "如何验证云端“集成”（例如通过 API）？",
+            "answer": "通过测试 PCE 与其他系统之间连接点的数据完整性和安全性来验证。"
+          },
+          {
+            "id": "cloud-22",
+            "question": "“SaaS 验证”与“PCE 验证”有何区别？",
+            "answer": "PCE 比 SaaS 提供更多控制权，允许进行更详细的自定义验证。"
+          },
+          {
+            "id": "cloud-23",
+            "question": "已验证 PCE 设置中的“发布管理”是什么？",
+            "answer": "将经过验证的配置从开发环境移动到测试环境再到生产环境的受控过程。"
+          },
+          {
+            "id": "cloud-24",
+            "question": "PCE CSV 中的“租户隔离”是什么？",
+            "answer": "验证客户的 GxP 数据在 SAP 云中与其它客户在逻辑上是隔离的。"
+          },
+          {
+            "id": "cloud-25",
+            "question": "PCE 中的“用户验收测试” (UAT) 是什么？",
+            "answer": "业务用户确认云系统在真实世界中支持其 GxP 流程的最终阶段。"
+          }
+        ]
+      },
+      {
+        "key": "architecture",
+        "label": "SAP架构",
+        "category": "架构与工具集",
+        "cards": [
+          {
+            "id": "architecture-1",
+            "question": "哪些 SAP 模块通常属于 GMP（制造）范畴？",
+            "answer": "PP/PP-PI、QM、MM、EWM/WM、批次管理和 ATTP（序列化）。"
+          },
+          {
+            "id": "architecture-2",
+            "question": "哪些 SAP 模块主要受 GDP（分销）管辖？",
+            "answer": "SD（销售与分销）、LE-TRA（运输）和序列化组件。"
+          },
+          {
+            "id": "architecture-3",
+            "question": "GLP（实验室）在 SAP 中如何体现？",
+            "answer": "通过 QM 模块与外部 LIMS（实验室系统）之间的集成体现。"
+          },
+          {
+            "id": "architecture-4",
+            "question": "EU Annex 11 与 FDA Part 11 的监管地位有何不同？",
+            "answer": "Part 11 是具有约束力的美国法律；Annex 11 是欧盟指南（尽管作为标准强制执行）。"
+          },
+          {
+            "id": "architecture-5",
+            "question": "什么是 GAMP Category 3 系统？",
+            "answer": "无需业务特定配置即可“直接使用”的非配置类产品 (COTS)。"
+          },
+          {
+            "id": "architecture-6",
+            "question": "“接口验证”的重点是什么？",
+            "answer": "证明系统间交接过程中的数据完整性和映射准确性。"
+          },
+          {
+            "id": "architecture-7",
+            "question": "Cloud ALM 如何集中管理验证交付物？",
+            "answer": "它在一个数字环境中将 URS、Functional Specs、测试用例和 RTM 关联起来。"
+          },
+          {
+            "id": "architecture-8",
+            "question": "定义“联邦式验证”模式。",
+            "answer": "保持全球验证骨干，同时为特定地区添加本地附件。"
+          },
+          {
+            "id": "architecture-9",
+            "question": "列举两个领先的“无纸化验证”平台。",
+            "answer": "Kneat Gx 和 ValGenesis VLMS。"
+          },
+          {
+            "id": "architecture-10",
+            "question": "哪种工具可以在补丁期间识别受影响的 GxP 对象？",
+            "answer": "LiveCompare 或 Panaya（变更影响分析工具）。"
+          },
+          {
+            "id": "architecture-11",
+            "question": "定义“蓝图 (Bluefield)”迁移路径。",
+            "answer": "一种选择性的数据过渡，将选定的流程移至 S/4HANA，平衡了 Greenfield 和 Brownfield。"
+          },
+          {
+            "id": "architecture-12",
+            "question": "CSV 的“洁净核心 (Clean Core)”有什么好处？",
+            "answer": "减少 Cat 5 自定义代码量，简化未来升级的验证工作。"
+          },
+          {
+            "id": "architecture-13",
+            "question": "ALCOA+ 中的“持久性 (Enduring)”是什么意思？",
+            "answer": "确保记录在整个要求的保存期限内都是可读且存在的。"
+          },
+          {
+            "id": "architecture-14",
+            "question": "NMPA 附录中计算机化系统的适用范围是什么？",
+            "answer": "范围广泛：研发、临床试验、生产和上市后。"
+          },
+          {
+            "id": "architecture-15",
+            "question": "什么是“GTI”验证要求？",
+            "answer": "证明准确地将开票数据导出到国家税务系统，以实现法律合规。"
+          },
+          {
+            "id": "architecture-16",
+            "question": "MLPS 三级认证需要什么？",
+            "answer": "自评估加上由获得认证的第三方机构进行的强制性年度审计。"
+          },
+          {
+            "id": "architecture-17",
+            "question": "专家经验如何应用于 CSA“非脚本化测试”？",
+            "answer": "测试人员通过探索系统来发现错误，而不是遵循固定的通过/失败脚本。"
+          },
+          {
+            "id": "architecture-18",
+            "question": "什么是“差异需求” (Delta Requirements)？",
+            "answer": "SAP 最佳实践未满足的业务需求，需要自定义配置或代码。"
+          },
+          {
+            "id": "architecture-19",
+            "question": "PCE 的“QRS”赋予客户什么权利？",
+            "answer": "对 SAP 云基础设施和 QMS 文档的法律审计权。"
+          },
+          {
+            "id": "architecture-20",
+            "question": "什么是“持续验证”？",
+            "answer": "使用自动化回归在云更新过程中保持系统的验证状态。"
+          },
+          {
+            "id": "architecture-21",
+            "question": "为什么“可追溯性”是 CSV 的核心？",
+            "answer": "它证明了每一个监管要求都经过了设计、构建和成功的测试。"
+          },
+          {
+            "id": "architecture-22",
+            "question": "“流程所有者” (Process Owner) 的职责是什么？",
+            "answer": "负责业务流程及其“预期用途”合规性的个人。"
+          },
+          {
+            "id": "architecture-23",
+            "question": "中国的 DSL 如何对数据进行分类？",
+            "answer": "根据对国家安全的影响对数据进行分类，以确定保护级别。"
+          },
+          {
+            "id": "architecture-24",
+            "question": "PIPL 下的“数据驻留”是什么？",
+            "answer": "将个人和重要数据存储在中国境内的物理服务器上。"
+          },
+          {
+            "id": "architecture-25",
+            "question": "什么是“V-Model”？",
+            "answer": "将需求阶段 (URS/FS) 映射到测试阶段 (PQ/OQ) 的生命周期模型。"
+          }
+        ]
       }
     ]
   }
-]
+}
