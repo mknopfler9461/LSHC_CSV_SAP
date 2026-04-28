@@ -82,7 +82,7 @@ const callGemini = async ({ question, card, sources, locale }) => {
       ],
       generationConfig: {
         temperature: 0.1,
-        maxOutputTokens: 320,
+        maxOutputTokens: 600,
       },
     }),
   });
@@ -106,7 +106,7 @@ const callDeepSeek = async ({ question, card, sources, locale }) => {
     body: JSON.stringify({
       model,
       temperature: 0.1,
-      max_tokens: 320,
+      max_tokens: 600,
       messages: [
         { role: 'system', content: systemInstruction(locale) },
         { role: 'user', content: buildPrompt({ question, card, sources, locale }) },
