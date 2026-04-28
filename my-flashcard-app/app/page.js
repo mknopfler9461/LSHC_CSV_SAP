@@ -1,6 +1,8 @@
 "use client";
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import flashcardData from '../data/flashcards.json';
+
+const COMMENTS_STORAGE_KEY = 'lshc-flashcard-comments-v1';
 
 const UI_TEXT = {
   en: {
@@ -19,6 +21,16 @@ const UI_TEXT = {
     revealed: 'revealed',
     clickReveal: 'Click to Reveal',
     clickBack: 'Click to Flip Back',
+    comments: 'Comments',
+    addComment: 'Add comment',
+    closeComments: 'Close comments',
+    nickname: 'Nickname',
+    comment: 'Comment',
+    nicknamePlaceholder: 'Your nickname',
+    commentPlaceholder: 'Share a note, question, or field observation...',
+    saveComment: 'Save comment',
+    noComments: 'No comments yet.',
+    commentsFor: 'Comments for this card',
     noCardsTitle: 'No flashcards found',
     noCardsBody: 'Try another business keyword or switch category.',
     categoryJoiner: ' · ',
@@ -39,6 +51,16 @@ const UI_TEXT = {
     revealed: '已揭示',
     clickReveal: '点击查看答案',
     clickBack: '点击翻回问题',
+    comments: '评论',
+    addComment: '添加评论',
+    closeComments: '关闭评论',
+    nickname: '昵称',
+    comment: '评论',
+    nicknamePlaceholder: '你的昵称',
+    commentPlaceholder: '留下备注、问题或项目观察...',
+    saveComment: '保存评论',
+    noComments: '暂无评论。',
+    commentsFor: '此卡片评论',
     noCardsTitle: '没有找到知识卡',
     noCardsBody: '请尝试其他业务关键词，或切换分类。',
     categoryJoiner: ' · ',
@@ -207,12 +229,22 @@ export default function FlashcardApp() {
   const [searchQuery, setSearchQuery] = useState('');
   const [flippedCards, setFlippedCards] = useState({});
   const [revealedCards, setRevealedCards] = useState(new Set());
+  const [cardComments, setCardComments] = useState(null);
+  const [activeCommentCardId, setActiveCommentCardId] = useState(null);
+  const [nicknameDraft, setNicknameDraft] = useState('');
+  const [commentDraft, setCommentDraft] = useState('');
 
   const availableLocales = Object.keys(flashcardData.locales);
   const categories = flashcardData.locales[locale] || flashcardData.locales[flashcardData.defaultLocale];
   const ui = UI_TEXT[locale] || UI_TEXT.en;
 
   const allCards = useMemo(() => getCards(categories), [categories]);
+  const activeCommentCard = useMemo(
+    () => allCards.find(card => card.id === activeCommentCardId),
+    [activeCommentCardId, allCards]
+  );
+  const commentsByCard = cardComments || {};
+  const activeCardComments = activeCommentCardId ? commentsByCard[activeCommentCardId] || [] : [];
   const categoryLabels = useMemo(
     () => Object.fromEntries(categories.map(({ key, label }) => [key, label])),
     [categories]
@@ -228,7 +260,41 @@ export default function FlashcardApp() {
     setLocale(nextLocale);
     setSearchQuery('');
     setFlippedCards({});
+    setActiveCommentCardId(null);
   };
+
+  useEffect(() => {
+    const timerId = window.setTimeout(() => {
+      try {
+        const storedComments = window.localStorage.getItem(COMMENTS_STORAGE_KEY);
+        if (!storedComments) {
+          setCardComments({});
+          return;
+        }
+
+        const parsedComments = JSON.parse(storedComments);
+        setCardComments(
+          parsedComments && typeof parsedComments === 'object' && !Array.isArray(parsedComments)
+            ? parsedComments
+            : {}
+        );
+      } catch {
+        setCardComments({});
+      }
+    }, 0);
+
+    return () => window.clearTimeout(timerId);
+  }, []);
+
+  useEffect(() => {
+    if (cardComments === null) return;
+
+    try {
+      window.localStorage.setItem(COMMENTS_STORAGE_KEY, JSON.stringify(cardComments));
+    } catch {
+      // Local comments remain in memory if the browser blocks storage.
+    }
+  }, [cardComments]);
 
   const toggleFlip = (id) => {
     setFlippedCards(prev => ({ ...prev, [id]: !prev[id] }));
@@ -238,6 +304,37 @@ export default function FlashcardApp() {
       next.add(id);
       return next;
     });
+  };
+
+  const openCommentDialog = (event, cardId) => {
+    event.stopPropagation();
+    setActiveCommentCardId(cardId);
+  };
+
+  const closeCommentDialog = () => {
+    setActiveCommentCardId(null);
+    setCommentDraft('');
+  };
+
+  const saveComment = (event) => {
+    event.preventDefault();
+    const text = commentDraft.trim();
+    if (!activeCommentCardId || !text) return;
+
+    const nickname = nicknameDraft.trim() || 'Anonymous';
+    const nextComment = {
+      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      nickname: nickname.slice(0, 40),
+      text: text.slice(0, 600),
+      createdAt: new Date().toISOString(),
+    };
+
+    setCardComments(prev => ({
+      ...(prev || {}),
+      [activeCommentCardId]: [...((prev || {})[activeCommentCardId] || []), nextComment],
+    }));
+    setNicknameDraft(nickname.slice(0, 40));
+    setCommentDraft('');
   };
 
   const filteredCards = useMemo(() => (
@@ -474,14 +571,23 @@ export default function FlashcardApp() {
                         boxShadow: '0 8px 30px rgba(37,99,235,0.25)',
                       }}
                     >
-                      <div>
+                      <div className="flex h-full flex-col items-center justify-center">
                         <span className="mb-3 block text-[10px] font-black uppercase tracking-widest text-blue-200">
                           {card.category}
                         </span>
-                        <p className="text-base font-semibold leading-snug">{card.answer}</p>
-                        <p className="mt-4 text-[10px] font-bold uppercase opacity-40">
-                          {ui.clickBack}
-                        </p>
+                        <p className="line-clamp-5 text-base font-semibold leading-snug">{card.answer}</p>
+                        <div className="mt-4 flex items-center justify-center gap-2">
+                          <button
+                            type="button"
+                            onClick={(event) => openCommentDialog(event, card.id)}
+                            className="rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wide text-white transition hover:bg-white/20"
+                          >
+                            {ui.comments} ({(commentsByCard[card.id] || []).length})
+                          </button>
+                          <p className="text-[10px] font-bold uppercase opacity-40">
+                            {ui.clickBack}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -496,6 +602,101 @@ export default function FlashcardApp() {
           )}
         </div>
       </div>
+
+      {activeCommentCard && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/50 px-4 py-6 backdrop-blur-sm"
+          onClick={closeCommentDialog}
+        >
+          <div
+            className="max-h-[90vh] w-full max-w-xl overflow-hidden rounded-2xl bg-white shadow-2xl"
+            onClick={event => event.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="comment-dialog-title"
+          >
+            <div className="border-b border-slate-100 px-6 py-5">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="text-xs font-bold uppercase tracking-wide text-blue-600">
+                    {ui.commentsFor}
+                  </p>
+                  <h2 id="comment-dialog-title" className="mt-1 text-lg font-bold text-slate-900">
+                    {activeCommentCard.question}
+                  </h2>
+                </div>
+                <button
+                  type="button"
+                  onClick={closeCommentDialog}
+                  className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900"
+                  aria-label={ui.closeComments}
+                >
+                  x
+                </button>
+              </div>
+            </div>
+
+            <div className="max-h-[calc(90vh-112px)] overflow-y-auto px-6 py-5">
+              <div className="space-y-3">
+                {activeCardComments.length > 0 ? (
+                  activeCardComments.map((comment) => (
+                    <div key={comment.id} className="rounded-lg border border-slate-100 bg-slate-50 p-4">
+                      <div className="mb-2 flex items-center justify-between gap-3">
+                        <p className="text-sm font-bold text-slate-900">{comment.nickname}</p>
+                        <time className="text-xs text-slate-400">
+                          {new Date(comment.createdAt).toLocaleString(locale === 'zh' ? 'zh-CN' : 'en-US')}
+                        </time>
+                      </div>
+                      <p className="whitespace-pre-wrap text-sm leading-relaxed text-slate-700">{comment.text}</p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="rounded-lg border border-dashed border-slate-200 px-4 py-8 text-center text-sm font-medium text-slate-500">
+                    {ui.noComments}
+                  </div>
+                )}
+              </div>
+
+              <form onSubmit={saveComment} className="mt-5 rounded-xl border border-slate-200 bg-white p-4">
+                <div className="grid gap-3">
+                  <label className="grid gap-1.5 text-sm font-bold text-slate-700">
+                    {ui.nickname}
+                    <input
+                      type="text"
+                      value={nicknameDraft}
+                      onChange={event => setNicknameDraft(event.target.value)}
+                      maxLength={40}
+                      placeholder={ui.nicknamePlaceholder}
+                      className="h-10 rounded-lg border border-slate-200 px-3 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-300 focus:ring-4 focus:ring-blue-100"
+                    />
+                  </label>
+                  <label className="grid gap-1.5 text-sm font-bold text-slate-700">
+                    {ui.comment}
+                    <textarea
+                      value={commentDraft}
+                      onChange={event => setCommentDraft(event.target.value)}
+                      required
+                      maxLength={600}
+                      rows={4}
+                      placeholder={ui.commentPlaceholder}
+                      className="resize-none rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium leading-relaxed text-slate-700 outline-none transition focus:border-blue-300 focus:ring-4 focus:ring-blue-100"
+                    />
+                  </label>
+                  <div className="flex justify-end">
+                    <button
+                      type="submit"
+                      className="rounded-full bg-blue-600 px-5 py-2.5 text-sm font-bold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:bg-slate-300"
+                      disabled={!commentDraft.trim()}
+                    >
+                      {ui.saveComment}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
