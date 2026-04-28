@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from 'react';
 import flashcardData from '../data/flashcards.json';
-import authoritySources from '../data/authority-sources.json';
+import { buildGroundedReply, normalizeSearchText, sourceDisplay } from '../lib/authority-helper';
 
 const COMMENTS_STORAGE_KEY = 'lshc-flashcard-comments-v1';
 
@@ -40,6 +40,8 @@ const UI_TEXT = {
     helperNoCard: 'No card selected',
     helperPlaceholder: 'Ask about this card...',
     helperSend: 'Ask',
+    helperThinking: 'Checking sources...',
+    helperModelFallback: 'Model unavailable; using local source summary.',
     helperSources: 'Sources',
     helperEmpty: 'Open a revealed card, then ask a focused compliance question.',
     helperUnsupported: 'I do not have enough support in the local authority cache for that question yet.',
@@ -82,6 +84,8 @@ const UI_TEXT = {
     helperNoCard: '未选择卡片',
     helperPlaceholder: '围绕此卡片提问...',
     helperSend: '提问',
+    helperThinking: '正在核对来源...',
+    helperModelFallback: '模型暂不可用；已改用本地来源摘要。',
     helperSources: '来源',
     helperEmpty: '先翻开一张卡片，再提出聚焦的合规问题。',
     helperUnsupported: '本地权威来源库暂时没有足够依据回答这个问题。',
@@ -164,53 +168,6 @@ const SEARCH_ALIASES = {
   csv: ['cvs'],
 };
 
-const STOP_WORDS = new Set([
-  'about',
-  'after',
-  'against',
-  'also',
-  'and',
-  'are',
-  'can',
-  'card',
-  'does',
-  'for',
-  'from',
-  'have',
-  'how',
-  'into',
-  'its',
-  'the',
-  'this',
-  'what',
-  'when',
-  'where',
-  'which',
-  'why',
-  'with',
-  'you',
-  'your',
-]);
-
-const AUTHORITY_KEYWORDS = [
-  '国家药监局',
-  '医疗器械',
-  '独立软件',
-  '现场检查',
-  '质量管理',
-  '中国',
-  '监管',
-  '验证',
-  '确认',
-  '软件',
-  'NMPA',
-  'FDA',
-  'EMA',
-  'ICH',
-  'GAMP',
-  'PIC/S',
-];
-
 const getCards = (categories) => (
   categories.flatMap(cat =>
     cat.cards.map(card => ({
@@ -219,13 +176,6 @@ const getCards = (categories) => (
       categoryKey: cat.key,
     }))
   )
-);
-
-const normalizeSearchText = (value) => (
-  String(value)
-    .toLowerCase()
-    .replace(/[^\p{L}\p{N}]+/gu, ' ')
-    .trim()
 );
 
 const hasAdjacentSwap = (source, target) => {
@@ -294,119 +244,6 @@ const cardMatchesSearch = (card, query) => {
   });
 };
 
-const getSearchTerms = (value) => {
-  const rawValue = String(value);
-  const normalizedValue = normalizeSearchText(rawValue);
-  const terms = normalizedValue
-    .split(' ')
-    .filter(term => term.length > 2 && !STOP_WORDS.has(term));
-
-  AUTHORITY_KEYWORDS.forEach((keyword) => {
-    if (rawValue.toLowerCase().includes(keyword.toLowerCase())) {
-      terms.push(normalizeSearchText(keyword));
-    }
-  });
-
-  return [...new Set(terms)];
-};
-
-const localizedValue = (value, locale, fallbackLocale = 'en') => {
-  if (Array.isArray(value)) return value;
-  if (!value || typeof value !== 'object') return value;
-
-  return value[locale] || value[fallbackLocale] || Object.values(value)[0];
-};
-
-const localizedArray = (value, locale) => {
-  const localized = localizedValue(value, locale);
-  return Array.isArray(localized) ? localized : [localized].filter(Boolean);
-};
-
-const sourceUrlEntries = (source, locale) => {
-  if (!source.url || typeof source.url !== 'object') {
-    return [{ locale, url: source.url }];
-  }
-
-  const preferredLocales = locale === 'zh' ? ['zh', 'en'] : ['en', 'zh'];
-  return preferredLocales
-    .filter(option => source.url[option])
-    .map(option => ({ locale: option, url: source.url[option] }));
-};
-
-const sourceDisplay = (source, locale) => ({
-  sourceType: localizedValue(source.sourceType, locale),
-  title: localizedValue(source.title, locale),
-  status: localizedValue(source.status, locale),
-  date: localizedValue(source.date, locale),
-  notes: localizedArray(source.notes, locale),
-  urls: sourceUrlEntries(source, locale),
-});
-
-const scoreAuthoritySource = (source, terms) => {
-  const sourceText = normalizeSearchText([
-    source.issuer,
-    localizedValue(source.sourceType, 'en'),
-    localizedValue(source.sourceType, 'zh'),
-    localizedValue(source.title, 'en'),
-    localizedValue(source.title, 'zh'),
-    localizedValue(source.status, 'en'),
-    localizedValue(source.status, 'zh'),
-    source.tags.join(' '),
-    localizedArray(source.notes, 'en').join(' '),
-    localizedArray(source.notes, 'zh').join(' '),
-  ].join(' '));
-
-  return terms.reduce((score, term) => {
-    if (source.tags.some(tag => normalizeSearchText(tag).split(' ').includes(term))) {
-      return score + 4;
-    }
-
-    return sourceText.includes(term) ? score + 1 : score;
-  }, 0);
-};
-
-const findAuthoritySources = ({ question, card }) => {
-  const terms = getSearchTerms([
-    question,
-    card?.question,
-    card?.answer,
-    card?.category,
-    card?.categoryKey,
-  ].filter(Boolean).join(' '));
-
-  if (terms.length === 0) return [];
-
-  return authoritySources
-    .map(source => ({
-      ...source,
-      score: scoreAuthoritySource(source, terms),
-    }))
-    .filter(source => source.score > 0)
-    .sort((a, b) => b.score - a.score || a.issuer.localeCompare(b.issuer))
-    .slice(0, 3);
-};
-
-const buildGroundedReply = ({ question, card, ui, locale }) => {
-  const matches = findAuthoritySources({ question, card });
-
-  if (matches.length === 0) {
-    return {
-      text: ui.helperUnsupported,
-      sources: [],
-    };
-  }
-
-  const bullets = matches.map((source) => {
-    const display = sourceDisplay(source, locale);
-    return `${source.issuer} (${display.sourceType}): ${display.notes[0]}`;
-  });
-
-  return {
-    text: [ui.helperGroundedLead, ...bullets].join('\n- '),
-    sources: matches,
-  };
-};
-
 export default function FlashcardApp() {
   const [showCover, setShowCover] = useState(true);
   const [locale, setLocale] = useState(flashcardData.defaultLocale);
@@ -422,6 +259,7 @@ export default function FlashcardApp() {
   const [helperOpen, setHelperOpen] = useState(false);
   const [helperDraft, setHelperDraft] = useState('');
   const [helperMessages, setHelperMessages] = useState([]);
+  const [helperLoading, setHelperLoading] = useState(false);
 
   const availableLocales = Object.keys(flashcardData.locales);
   const categories = flashcardData.locales[locale] || flashcardData.locales[flashcardData.defaultLocale];
@@ -537,24 +375,64 @@ export default function FlashcardApp() {
     setCommentDraft('');
   };
 
-  const submitHelperQuestion = (event) => {
+  const submitHelperQuestion = async (event) => {
     event.preventDefault();
     const question = helperDraft.trim();
-    if (!question) return;
+    if (!question || helperLoading) return;
 
-    const reply = buildGroundedReply({
+    const userMessage = { id: `${Date.now()}-user`, role: 'user', text: question };
+    setHelperMessages(prev => [...prev, userMessage]);
+    setHelperDraft('');
+    setHelperLoading(true);
+
+    const localReply = buildGroundedReply({
       question,
       card: activeStudyCard,
       ui,
       locale,
     });
 
-    setHelperMessages(prev => [
-      ...prev,
-      { id: `${Date.now()}-user`, role: 'user', text: question },
-      { id: `${Date.now()}-assistant`, role: 'assistant', ...reply },
-    ]);
-    setHelperDraft('');
+    try {
+      const response = await fetch('/api/authority-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question,
+          card: activeStudyCard,
+          locale,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Authority helper failed with ${response.status}`);
+      }
+
+      const reply = await response.json();
+      setHelperMessages(prev => [
+        ...prev,
+        {
+          id: `${Date.now()}-assistant`,
+          role: 'assistant',
+          text: reply.text || localReply.text,
+          sources: reply.sources || localReply.sources,
+          mode: reply.mode || 'local',
+          provider: reply.provider,
+        },
+      ]);
+    } catch {
+      setHelperMessages(prev => [
+        ...prev,
+        {
+          id: `${Date.now()}-assistant`,
+          role: 'assistant',
+          text: `${ui.helperModelFallback}\n\n${localReply.text}`,
+          sources: localReply.sources,
+          mode: 'local',
+        },
+      ]);
+    } finally {
+      setHelperLoading(false);
+    }
   };
 
   const filteredCards = useMemo(() => (
@@ -919,6 +797,11 @@ export default function FlashcardApp() {
                   </div>
                 ))
               )}
+              {helperLoading && (
+                <div className="mr-6 rounded-xl border border-slate-100 bg-white p-3 text-sm font-semibold text-slate-500 shadow-sm">
+                  {ui.helperThinking}
+                </div>
+              )}
             </div>
 
             <form onSubmit={submitHelperQuestion} className="border-t border-slate-100 bg-white p-3">
@@ -932,10 +815,10 @@ export default function FlashcardApp() {
                 />
                 <button
                   type="submit"
-                  disabled={!helperDraft.trim()}
+                  disabled={!helperDraft.trim() || helperLoading}
                   className="h-10 rounded-full bg-slate-900 px-4 text-sm font-bold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-300"
                 >
-                  {ui.helperSend}
+                  {helperLoading ? '...' : ui.helperSend}
                 </button>
               </div>
             </form>

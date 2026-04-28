@@ -16,6 +16,28 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Confined Authority Helper
+
+The floating authority helper answers from the local source cache first. AI model use is optional and remains confined to retrieved cache excerpts.
+
+To enable a model, copy `.env.example` to `.env.local` and add one provider key:
+
+```bash
+AUTHORITY_CHAT_PROVIDER=gemini
+GEMINI_API_KEY=your_key_here
+GEMINI_MODEL=gemini-2.5-flash
+```
+
+or:
+
+```bash
+AUTHORITY_CHAT_PROVIDER=deepseek
+DEEPSEEK_API_KEY=your_key_here
+DEEPSEEK_MODEL=deepseek-chat
+```
+
+If no key is present, the helper still works with deterministic local source summaries.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
