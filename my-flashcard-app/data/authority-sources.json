@@ -1,0 +1,152 @@
+[
+  {
+    "id": "fda-csa-qms-2026",
+    "issuer": "FDA",
+    "sourceType": "Regulator guidance",
+    "title": "Computer Software Assurance for Production and Quality Management System Software",
+    "status": "Final guidance",
+    "date": "February 2026",
+    "url": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/computer-software-assurance-production-and-quality-management-system-software",
+    "tags": ["csv", "csa", "qms", "quality system", "medical device", "risk", "validation", "software", "computerized system"],
+    "notes": [
+      "FDA frames computer software assurance as a risk-based way to establish confidence in automation used for production or quality management systems.",
+      "The guidance focuses rigor where software could affect device quality, production, or quality management outcomes.",
+      "CSA supplements FDA software validation guidance and supersedes the older automated process equipment and quality system software section for this scope."
+    ]
+  },
+  {
+    "id": "fda-software-validation-2002",
+    "issuer": "FDA",
+    "sourceType": "Regulator guidance",
+    "title": "General Principles of Software Validation",
+    "status": "Final guidance",
+    "date": "January 2002",
+    "url": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/general-principles-software-validation",
+    "tags": ["csv", "validation", "software", "intended use", "requirements", "test", "medical device", "documentation"],
+    "notes": [
+      "FDA emphasizes documented intended use, user requirements, validation protocol, acceptance criteria, testing evidence, and validation summary.",
+      "The regulated manufacturer remains responsible for showing the software performs as intended in the chosen application.",
+      "Testing should challenge functions and conditions relevant to the intended use, including critical parameters and error conditions."
+    ]
+  },
+  {
+    "id": "eu-annex-11-2011",
+    "issuer": "European Commission",
+    "sourceType": "Regulator GMP annex",
+    "title": "EudraLex Volume 4 Annex 11: Computerised Systems",
+    "status": "Current published annex, revision consultation closed in 2025",
+    "date": "January 2011",
+    "url": "https://health.ec.europa.eu/medicinal-products/eudralex/eudralex-volume-4_en",
+    "tags": ["annex 11", "eu gmp", "computerised systems", "data integrity", "validation", "supplier", "security", "audit trail", "backup"],
+    "notes": [
+      "EU GMP Annex 11 is the main EU GMP anchor for computerised systems used in regulated pharmaceutical operations.",
+      "The annex is commonly read together with Chapter 4 documentation expectations and the broader EudraLex Volume 4 GMP framework.",
+      "Key themes include validation, supplier/service provider management, data integrity controls, security, audit trails, backup, and change control."
+    ]
+  },
+  {
+    "id": "ich-q9-r1-2023",
+    "issuer": "ICH",
+    "sourceType": "International guideline",
+    "title": "ICH Q9(R1): Quality Risk Management",
+    "status": "Step 4 guideline",
+    "date": "January 2023",
+    "url": "https://www.ich.org/page/quality-guidelines",
+    "tags": ["risk", "qrm", "quality risk management", "formality", "subjectivity", "risk review", "patient safety", "product quality"],
+    "notes": [
+      "ICH Q9(R1) supports structured quality risk management and risk-based decision-making across pharmaceutical quality systems.",
+      "The revision highlights formality in QRM, subjectivity management, product availability risks, and risk-based decision-making.",
+      "For CSV and GxP systems, Q9(R1) helps justify proportional controls based on risk to patient safety, product quality, and data integrity."
+    ]
+  },
+  {
+    "id": "ich-q10-pqs",
+    "issuer": "ICH",
+    "sourceType": "International guideline",
+    "title": "ICH Q10: Pharmaceutical Quality System",
+    "status": "Step 4 guideline",
+    "date": "June 2008",
+    "url": "https://www.ich.org/page/quality-guidelines",
+    "tags": ["pqs", "pharmaceutical quality system", "lifecycle", "continual improvement", "gmp", "quality management"],
+    "notes": [
+      "ICH Q10 describes a pharmaceutical quality system model spanning development, technology transfer, commercial manufacturing, and product discontinuation.",
+      "The model complements GMP and supports lifecycle management, management responsibility, corrective and preventive action, and continual improvement.",
+      "For SAP-enabled processes, Q10 supports tying system controls to the broader quality system rather than treating validation as a one-off document exercise."
+    ]
+  },
+  {
+    "id": "pics-pi-011",
+    "issuer": "PIC/S",
+    "sourceType": "Inspectorate guidance",
+    "title": "Good Practices for Computerised Systems in Regulated GxP Environments (PI 011)",
+    "status": "Published guidance under revision",
+    "date": "September 2007",
+    "url": "https://picscheme.org/en/pia-pic-s-training-expert-circles-training-computerised-syst",
+    "tags": ["pic/s", "pi 011", "computerised systems", "gxp", "inspection", "validation", "electronic records", "security", "backup"],
+    "notes": [
+      "PIC/S identifies PI 011 as computerised systems guidance for regulated GxP environments and notes that it is under revision.",
+      "The guidance is useful for inspection-oriented thinking around validation, lifecycle controls, electronic records, electronic signatures, security, backup, and regulated-user responsibilities.",
+      "Because PI 011 is under revision, the app should surface it as inspectorate guidance to consider alongside current local law and GMP requirements."
+    ]
+  },
+  {
+    "id": "who-gmp-main-principles",
+    "issuer": "WHO",
+    "sourceType": "International regulator guidance",
+    "title": "WHO GMP for Pharmaceutical Products: Main Principles",
+    "status": "Technical document",
+    "date": "2014",
+    "url": "https://www.who.int/publications/m/item/trs986-annex2",
+    "tags": ["who", "gmp", "quality assurance", "validation", "documentation", "manufacturing", "quality control"],
+    "notes": [
+      "WHO describes GMP as quality assurance that products are consistently produced and controlled to quality standards appropriate to intended use.",
+      "WHO GMP main principles provide a broad baseline for manufacturing authorization, inspection, training, production, quality control, and quality assurance.",
+      "For computerized SAP processes, WHO GMP supports the need for defined, validated, reviewed, and documented processes."
+    ]
+  },
+  {
+    "id": "who-validation-2019",
+    "issuer": "WHO",
+    "sourceType": "International regulator guidance",
+    "title": "WHO GMP: Guidelines on Validation",
+    "status": "Technical document",
+    "date": "2019",
+    "url": "https://www.who.int/publications/m/item/trs1019-annex3",
+    "tags": ["who", "validation", "qualification", "gmp", "process validation", "lifecycle", "risk"],
+    "notes": [
+      "WHO validation guidance is useful for explaining qualification and validation as lifecycle activities within GMP.",
+      "The guidance supports a documented, risk-aware approach to validation activities rather than treating validation as a single test event.",
+      "For SAP programs, it helps position CSV evidence as part of broader validation planning and lifecycle maintenance."
+    ]
+  },
+  {
+    "id": "nmpa-software-inspection-2020",
+    "issuer": "NMPA",
+    "sourceType": "Regulator inspection guidance",
+    "title": "Guidance for On-Site Inspection of Independent Software Appended in Good Manufacturing Practice for Medical Devices",
+    "status": "Issued guidance notice",
+    "date": "June 2020",
+    "url": "https://english.nmpa.gov.cn/2020-06/04/c_528674.htm",
+    "tags": ["nmpa", "china", "medical device", "software", "inspection", "gmp", "quality management", "on-site inspection"],
+    "notes": [
+      "NMPA issued inspection guidance to support supervision of medical device manufacturers implementing GMP and independent software requirements.",
+      "The notice is especially relevant when explaining China medical device software inspection expectations and local regulatory supervision.",
+      "For SAP or quality system software in China-related projects, use this source as a China regulator signal and verify detailed Chinese-language requirements before final compliance positions."
+    ]
+  },
+  {
+    "id": "ispe-gamp-5-second-edition",
+    "issuer": "ISPE",
+    "sourceType": "Industry guidance",
+    "title": "GAMP 5 Guide, 2nd Edition",
+    "status": "Published industry guide",
+    "date": "July 2022",
+    "url": "https://ispe.org/publications/guidance-documents/gamp-5",
+    "tags": ["gamp", "ispe", "csv", "csa", "risk-based", "critical thinking", "supplier", "cloud", "agile", "data integrity"],
+    "notes": [
+      "ISPE positions GAMP 5 as practical industry guidance for effective, high-quality, fit-for-intended-use GxP computerized systems.",
+      "The second edition emphasizes critical thinking, supplier involvement, iterative and incremental methods, software tools, automation, cloud, AI/ML, open-source software, and data integrity links.",
+      "Because this is industry guidance rather than a regulation, the app should use it to explain implementation approaches while tying compliance claims back to applicable regulator requirements."
+    ]
+  }
+]

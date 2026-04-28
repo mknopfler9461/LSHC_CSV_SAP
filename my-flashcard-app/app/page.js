@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useMemo, useState } from 'react';
 import flashcardData from '../data/flashcards.json';
+import authoritySources from '../data/authority-sources.json';
 
 const COMMENTS_STORAGE_KEY = 'lshc-flashcard-comments-v1';
 
@@ -31,6 +32,18 @@ const UI_TEXT = {
     saveComment: 'Save comment',
     noComments: 'No comments yet.',
     commentsFor: 'Comments for this card',
+    helperTitle: 'Authority Helper',
+    helperBadge: 'Local source cache',
+    helperOpen: 'Open authority helper',
+    helperClose: 'Close authority helper',
+    helperContext: 'Current card',
+    helperNoCard: 'No card selected',
+    helperPlaceholder: 'Ask about this card...',
+    helperSend: 'Ask',
+    helperSources: 'Sources',
+    helperEmpty: 'Open a revealed card, then ask a focused compliance question.',
+    helperUnsupported: 'I do not have enough support in the local authority cache for that question yet.',
+    helperGroundedLead: 'From the local authority cache:',
     noCardsTitle: 'No flashcards found',
     noCardsBody: 'Try another business keyword or switch category.',
     categoryJoiner: ' · ',
@@ -61,6 +74,18 @@ const UI_TEXT = {
     saveComment: '保存评论',
     noComments: '暂无评论。',
     commentsFor: '此卡片评论',
+    helperTitle: '权威来源助手',
+    helperBadge: '本地来源库',
+    helperOpen: '打开权威来源助手',
+    helperClose: '关闭权威来源助手',
+    helperContext: '当前卡片',
+    helperNoCard: '未选择卡片',
+    helperPlaceholder: '围绕此卡片提问...',
+    helperSend: '提问',
+    helperSources: '来源',
+    helperEmpty: '先翻开一张卡片，再提出聚焦的合规问题。',
+    helperUnsupported: '本地权威来源库暂时没有足够依据回答这个问题。',
+    helperGroundedLead: '基于本地权威来源库：',
     noCardsTitle: '没有找到知识卡',
     noCardsBody: '请尝试其他业务关键词，或切换分类。',
     categoryJoiner: ' · ',
@@ -138,6 +163,34 @@ const SEARCH_ALIASES = {
   cvs: ['csv'],
   csv: ['cvs'],
 };
+
+const STOP_WORDS = new Set([
+  'about',
+  'after',
+  'against',
+  'also',
+  'and',
+  'are',
+  'can',
+  'card',
+  'does',
+  'for',
+  'from',
+  'have',
+  'how',
+  'into',
+  'its',
+  'the',
+  'this',
+  'what',
+  'when',
+  'where',
+  'which',
+  'why',
+  'with',
+  'you',
+  'your',
+]);
 
 const getCards = (categories) => (
   categories.flatMap(cat =>
@@ -222,6 +275,72 @@ const cardMatchesSearch = (card, query) => {
   });
 };
 
+const getSearchTerms = (value) => (
+  normalizeSearchText(value)
+    .split(' ')
+    .filter(term => term.length > 2 && !STOP_WORDS.has(term))
+);
+
+const scoreAuthoritySource = (source, terms) => {
+  const sourceText = normalizeSearchText([
+    source.issuer,
+    source.sourceType,
+    source.title,
+    source.status,
+    source.tags.join(' '),
+    source.notes.join(' '),
+  ].join(' '));
+
+  return terms.reduce((score, term) => {
+    if (source.tags.some(tag => normalizeSearchText(tag).split(' ').includes(term))) {
+      return score + 4;
+    }
+
+    return sourceText.includes(term) ? score + 1 : score;
+  }, 0);
+};
+
+const findAuthoritySources = ({ question, card }) => {
+  const terms = getSearchTerms([
+    question,
+    card?.question,
+    card?.answer,
+    card?.category,
+    card?.categoryKey,
+  ].filter(Boolean).join(' '));
+
+  if (terms.length === 0) return [];
+
+  return authoritySources
+    .map(source => ({
+      ...source,
+      score: scoreAuthoritySource(source, terms),
+    }))
+    .filter(source => source.score > 0)
+    .sort((a, b) => b.score - a.score || a.issuer.localeCompare(b.issuer))
+    .slice(0, 3);
+};
+
+const buildGroundedReply = ({ question, card, ui }) => {
+  const matches = findAuthoritySources({ question, card });
+
+  if (matches.length === 0) {
+    return {
+      text: ui.helperUnsupported,
+      sources: [],
+    };
+  }
+
+  const bullets = matches.map(source => (
+    `${source.issuer} (${source.sourceType}): ${source.notes[0]}`
+  ));
+
+  return {
+    text: [ui.helperGroundedLead, ...bullets].join('\n- '),
+    sources: matches,
+  };
+};
+
 export default function FlashcardApp() {
   const [showCover, setShowCover] = useState(true);
   const [locale, setLocale] = useState(flashcardData.defaultLocale);
@@ -233,6 +352,10 @@ export default function FlashcardApp() {
   const [activeCommentCardId, setActiveCommentCardId] = useState(null);
   const [nicknameDraft, setNicknameDraft] = useState('');
   const [commentDraft, setCommentDraft] = useState('');
+  const [activeStudyCardId, setActiveStudyCardId] = useState(null);
+  const [helperOpen, setHelperOpen] = useState(false);
+  const [helperDraft, setHelperDraft] = useState('');
+  const [helperMessages, setHelperMessages] = useState([]);
 
   const availableLocales = Object.keys(flashcardData.locales);
   const categories = flashcardData.locales[locale] || flashcardData.locales[flashcardData.defaultLocale];
@@ -242,6 +365,10 @@ export default function FlashcardApp() {
   const activeCommentCard = useMemo(
     () => allCards.find(card => card.id === activeCommentCardId),
     [activeCommentCardId, allCards]
+  );
+  const activeStudyCard = useMemo(
+    () => allCards.find(card => card.id === activeStudyCardId),
+    [activeStudyCardId, allCards]
   );
   const commentsByCard = cardComments || {};
   const activeCardComments = activeCommentCardId ? commentsByCard[activeCommentCardId] || [] : [];
@@ -261,6 +388,8 @@ export default function FlashcardApp() {
     setSearchQuery('');
     setFlippedCards({});
     setActiveCommentCardId(null);
+    setActiveStudyCardId(null);
+    setHelperMessages([]);
   };
 
   useEffect(() => {
@@ -297,6 +426,11 @@ export default function FlashcardApp() {
   }, [cardComments]);
 
   const toggleFlip = (id) => {
+    const willReveal = !flippedCards[id];
+    if (willReveal) {
+      setActiveStudyCardId(id);
+    }
+
     setFlippedCards(prev => ({ ...prev, [id]: !prev[id] }));
     setRevealedCards(prev => {
       if (prev.has(id)) return prev;
@@ -335,6 +469,25 @@ export default function FlashcardApp() {
     }));
     setNicknameDraft(nickname.slice(0, 40));
     setCommentDraft('');
+  };
+
+  const submitHelperQuestion = (event) => {
+    event.preventDefault();
+    const question = helperDraft.trim();
+    if (!question) return;
+
+    const reply = buildGroundedReply({
+      question,
+      card: activeStudyCard,
+      ui,
+    });
+
+    setHelperMessages(prev => [
+      ...prev,
+      { id: `${Date.now()}-user`, role: 'user', text: question },
+      { id: `${Date.now()}-assistant`, role: 'assistant', ...reply },
+    ]);
+    setHelperDraft('');
   };
 
   const filteredCards = useMemo(() => (
@@ -601,6 +754,111 @@ export default function FlashcardApp() {
             </div>
           )}
         </div>
+      </div>
+
+      <div className="fixed bottom-5 right-5 z-40 flex max-w-[calc(100vw-2.5rem)] flex-col items-end gap-3">
+        {helperOpen && (
+          <section
+            className="flex h-[520px] w-[380px] max-w-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
+            aria-label={ui.helperTitle}
+          >
+            <div className="border-b border-slate-100 px-4 py-3">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-sm font-extrabold text-slate-900">{ui.helperTitle}</h2>
+                    <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-emerald-700">
+                      {ui.helperBadge}
+                    </span>
+                  </div>
+                  <p className="mt-1 line-clamp-2 text-xs font-medium text-slate-500">
+                    {activeStudyCard ? `${ui.helperContext}: ${activeStudyCard.question}` : ui.helperNoCard}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setHelperOpen(false)}
+                  className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900"
+                  aria-label={ui.helperClose}
+                >
+                  x
+                </button>
+              </div>
+            </div>
+
+            <div className="flex-1 space-y-3 overflow-y-auto bg-slate-50 px-4 py-4">
+              {helperMessages.length === 0 ? (
+                <div className="rounded-lg border border-dashed border-slate-200 bg-white px-4 py-8 text-center text-sm font-medium text-slate-500">
+                  {ui.helperEmpty}
+                </div>
+              ) : (
+                helperMessages.map((message) => (
+                  <div
+                    key={message.id}
+                    className={`rounded-xl p-3 text-sm shadow-sm ${
+                      message.role === 'user'
+                        ? 'ml-8 bg-slate-900 text-white'
+                        : 'mr-6 border border-slate-100 bg-white text-slate-700'
+                    }`}
+                  >
+                    <p className="whitespace-pre-wrap leading-relaxed">{message.text}</p>
+                    {message.sources?.length > 0 && (
+                      <div className="mt-3 border-t border-slate-100 pt-3">
+                        <p className="mb-2 text-[10px] font-black uppercase tracking-wide text-slate-400">
+                          {ui.helperSources}
+                        </p>
+                        <div className="space-y-2">
+                          {message.sources.map(source => (
+                            <a
+                              key={source.id}
+                              href={source.url}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="block rounded-lg border border-slate-100 bg-slate-50 p-2 text-xs font-semibold text-slate-700 transition hover:border-blue-200 hover:text-blue-700"
+                            >
+                              <span className="block text-[10px] uppercase tracking-wide text-slate-400">
+                                {source.issuer} · {source.sourceType} · {source.date}
+                              </span>
+                              {source.title}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                ))
+              )}
+            </div>
+
+            <form onSubmit={submitHelperQuestion} className="border-t border-slate-100 bg-white p-3">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={helperDraft}
+                  onChange={event => setHelperDraft(event.target.value)}
+                  placeholder={ui.helperPlaceholder}
+                  className="h-10 min-w-0 flex-1 rounded-full border border-slate-200 px-4 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-300 focus:ring-4 focus:ring-blue-100"
+                />
+                <button
+                  type="submit"
+                  disabled={!helperDraft.trim()}
+                  className="h-10 rounded-full bg-slate-900 px-4 text-sm font-bold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                >
+                  {ui.helperSend}
+                </button>
+              </div>
+            </form>
+          </section>
+        )}
+
+        <button
+          type="button"
+          onClick={() => setHelperOpen(prev => !prev)}
+          className="rounded-full bg-slate-900 px-5 py-3 text-sm font-extrabold text-white shadow-xl shadow-slate-400/40 transition hover:bg-slate-700"
+          aria-label={helperOpen ? ui.helperClose : ui.helperOpen}
+        >
+          {ui.helperTitle}
+        </button>
       </div>
 
       {activeCommentCard && (
