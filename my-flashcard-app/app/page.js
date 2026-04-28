@@ -192,6 +192,25 @@ const STOP_WORDS = new Set([
   'your',
 ]);
 
+const AUTHORITY_KEYWORDS = [
+  '国家药监局',
+  '医疗器械',
+  '独立软件',
+  '现场检查',
+  '质量管理',
+  '中国',
+  '监管',
+  '验证',
+  '确认',
+  '软件',
+  'NMPA',
+  'FDA',
+  'EMA',
+  'ICH',
+  'GAMP',
+  'PIC/S',
+];
+
 const getCards = (categories) => (
   categories.flatMap(cat =>
     cat.cards.map(card => ({
@@ -275,20 +294,66 @@ const cardMatchesSearch = (card, query) => {
   });
 };
 
-const getSearchTerms = (value) => (
-  normalizeSearchText(value)
+const getSearchTerms = (value) => {
+  const rawValue = String(value);
+  const normalizedValue = normalizeSearchText(rawValue);
+  const terms = normalizedValue
     .split(' ')
-    .filter(term => term.length > 2 && !STOP_WORDS.has(term))
-);
+    .filter(term => term.length > 2 && !STOP_WORDS.has(term));
+
+  AUTHORITY_KEYWORDS.forEach((keyword) => {
+    if (rawValue.toLowerCase().includes(keyword.toLowerCase())) {
+      terms.push(normalizeSearchText(keyword));
+    }
+  });
+
+  return [...new Set(terms)];
+};
+
+const localizedValue = (value, locale, fallbackLocale = 'en') => {
+  if (Array.isArray(value)) return value;
+  if (!value || typeof value !== 'object') return value;
+
+  return value[locale] || value[fallbackLocale] || Object.values(value)[0];
+};
+
+const localizedArray = (value, locale) => {
+  const localized = localizedValue(value, locale);
+  return Array.isArray(localized) ? localized : [localized].filter(Boolean);
+};
+
+const sourceUrlEntries = (source, locale) => {
+  if (!source.url || typeof source.url !== 'object') {
+    return [{ locale, url: source.url }];
+  }
+
+  const preferredLocales = locale === 'zh' ? ['zh', 'en'] : ['en', 'zh'];
+  return preferredLocales
+    .filter(option => source.url[option])
+    .map(option => ({ locale: option, url: source.url[option] }));
+};
+
+const sourceDisplay = (source, locale) => ({
+  sourceType: localizedValue(source.sourceType, locale),
+  title: localizedValue(source.title, locale),
+  status: localizedValue(source.status, locale),
+  date: localizedValue(source.date, locale),
+  notes: localizedArray(source.notes, locale),
+  urls: sourceUrlEntries(source, locale),
+});
 
 const scoreAuthoritySource = (source, terms) => {
   const sourceText = normalizeSearchText([
     source.issuer,
-    source.sourceType,
-    source.title,
-    source.status,
+    localizedValue(source.sourceType, 'en'),
+    localizedValue(source.sourceType, 'zh'),
+    localizedValue(source.title, 'en'),
+    localizedValue(source.title, 'zh'),
+    localizedValue(source.status, 'en'),
+    localizedValue(source.status, 'zh'),
     source.tags.join(' '),
-    source.notes.join(' '),
+    localizedArray(source.notes, 'en').join(' '),
+    localizedArray(source.notes, 'zh').join(' '),
   ].join(' '));
 
   return terms.reduce((score, term) => {
@@ -321,7 +386,7 @@ const findAuthoritySources = ({ question, card }) => {
     .slice(0, 3);
 };
 
-const buildGroundedReply = ({ question, card, ui }) => {
+const buildGroundedReply = ({ question, card, ui, locale }) => {
   const matches = findAuthoritySources({ question, card });
 
   if (matches.length === 0) {
@@ -331,9 +396,10 @@ const buildGroundedReply = ({ question, card, ui }) => {
     };
   }
 
-  const bullets = matches.map(source => (
-    `${source.issuer} (${source.sourceType}): ${source.notes[0]}`
-  ));
+  const bullets = matches.map((source) => {
+    const display = sourceDisplay(source, locale);
+    return `${source.issuer} (${display.sourceType}): ${display.notes[0]}`;
+  });
 
   return {
     text: [ui.helperGroundedLead, ...bullets].join('\n- '),
@@ -480,6 +546,7 @@ export default function FlashcardApp() {
       question,
       card: activeStudyCard,
       ui,
+      locale,
     });
 
     setHelperMessages(prev => [
@@ -808,20 +875,44 @@ export default function FlashcardApp() {
                           {ui.helperSources}
                         </p>
                         <div className="space-y-2">
-                          {message.sources.map(source => (
-                            <a
-                              key={source.id}
-                              href={source.url}
-                              target="_blank"
-                              rel="noreferrer"
-                              className="block rounded-lg border border-slate-100 bg-slate-50 p-2 text-xs font-semibold text-slate-700 transition hover:border-blue-200 hover:text-blue-700"
-                            >
-                              <span className="block text-[10px] uppercase tracking-wide text-slate-400">
-                                {source.issuer} · {source.sourceType} · {source.date}
-                              </span>
-                              {source.title}
-                            </a>
-                          ))}
+                          {message.sources.map((source) => {
+                            const display = sourceDisplay(source, locale);
+                            const primaryUrl = display.urls[0]?.url;
+
+                            return (
+                              <div
+                                key={source.id}
+                                className="rounded-lg border border-slate-100 bg-slate-50 p-2 text-xs font-semibold text-slate-700"
+                              >
+                                <a
+                                  href={primaryUrl}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                  className="block transition hover:text-blue-700"
+                                >
+                                  <span className="block text-[10px] uppercase tracking-wide text-slate-400">
+                                    {source.issuer} · {display.sourceType} · {display.date}
+                                  </span>
+                                  {display.title}
+                                </a>
+                                {display.urls.length > 1 && (
+                                  <div className="mt-1 flex gap-2 text-[10px] font-bold uppercase tracking-wide">
+                                    {display.urls.map(entry => (
+                                      <a
+                                        key={entry.locale}
+                                        href={entry.url}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="text-blue-600 hover:text-blue-800"
+                                      >
+                                        {entry.locale}
+                                      </a>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
                         </div>
                       </div>
                     )}

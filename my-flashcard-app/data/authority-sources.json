@@ -122,17 +122,45 @@
   {
     "id": "nmpa-software-inspection-2020",
     "issuer": "NMPA",
-    "sourceType": "Regulator inspection guidance",
-    "title": "Guidance for On-Site Inspection of Independent Software Appended in Good Manufacturing Practice for Medical Devices",
-    "status": "Issued guidance notice",
-    "date": "June 2020",
-    "url": "https://english.nmpa.gov.cn/2020-06/04/c_528674.htm",
-    "tags": ["nmpa", "china", "medical device", "software", "inspection", "gmp", "quality management", "on-site inspection"],
-    "notes": [
-      "NMPA issued inspection guidance to support supervision of medical device manufacturers implementing GMP and independent software requirements.",
-      "The notice is especially relevant when explaining China medical device software inspection expectations and local regulatory supervision.",
-      "For SAP or quality system software in China-related projects, use this source as a China regulator signal and verify detailed Chinese-language requirements before final compliance positions."
-    ]
+    "sourceType": {
+      "en": "Regulator inspection guidance",
+      "zh": "监管现场检查指导原则"
+    },
+    "title": {
+      "en": "Guidance for On-Site Inspection of Independent Software Appended in Good Manufacturing Practice for Medical Devices",
+      "zh": "医疗器械生产质量管理规范独立软件现场检查指导原则"
+    },
+    "status": {
+      "en": "Issued guidance notice; English page available from NMPA",
+      "zh": "国家药监局综合司通知，药监综械管〔2020〕57号"
+    },
+    "date": {
+      "en": "June 2020",
+      "zh": "2020年5月29日发布，2020年6月4日公开"
+    },
+    "sourceLanguage": "zh",
+    "translationAvailable": true,
+    "url": {
+      "en": "https://english.nmpa.gov.cn/2020-06/04/c_528674.htm",
+      "zh": "https://cs.cnpharm.com/c/2020-06-04/734173.shtml"
+    },
+    "urlNotes": {
+      "en": "English NMPA page is official. Chinese link is a China Food and Drug News mirror citing the NMPA website because the direct Chinese NMPA page was not reliably retrievable during cache refresh.",
+      "zh": "英文链接为国家药监局英文官网。中文链接为中国食品药品网转载并注明来源于国家药监局网站；本次更新未能稳定取得国家药监局中文官网直链。"
+    },
+    "tags": ["nmpa", "china", "中国", "国家药监局", "医疗器械", "独立软件", "现场检查", "质量管理", "medical device", "software", "inspection", "gmp", "quality management", "on-site inspection"],
+    "notes": {
+      "en": [
+        "NMPA issued inspection guidance to support supervision of medical device manufacturers implementing GMP and independent software requirements.",
+        "The notice is especially relevant when explaining China medical device software inspection expectations and local regulatory supervision.",
+        "For SAP or quality system software in China-related projects, use this source as a China regulator signal and verify detailed Chinese-language requirements before final compliance positions."
+      ],
+      "zh": [
+        "国家药监局综合司印发该指导原则，用于加强医疗器械生产企业实施《医疗器械生产质量管理规范》及其附录独立软件的监督检查。",
+        "该指导原则面向监管部门开展现场检查和检查结果评估，适合用于解释中国医疗器械独立软件相关的本地检查关注点。",
+        "涉及中国项目中的 SAP 或质量体系软件时，应优先参考中文监管口径，并在形成正式合规结论前核对现行中文法规和检查要求。"
+      ]
+    }
   },
   {
     "id": "ispe-gamp-5-second-edition",
